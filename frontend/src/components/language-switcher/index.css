@@ -1,0 +1,48 @@
+.language-switcher {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.language-switcher .button {
+  padding: 0.5rem 1rem;
+  transition: all 0.4s ease;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.language-switcher .button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.language-switcher .button:hover:not(.active) {
+  background-color: #f1f1f1;
+}
+
+.language-switcher .button:focus {
+  background-color: #007bff;
+  color: white;
+}
+
+.language-switcher .button:not(.active):hover {
+  background-color: #d4d4d4;
+}
+
+.language-switcher .flag {
+  width: 2.4rem;
+  height: 1.6rem;
+  border-radius: 0.3rem;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .language-switcher .flag {
+    width: 1.8rem;
+    height: 1.2rem;
+  }
+}

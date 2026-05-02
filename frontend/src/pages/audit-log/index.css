@@ -1,0 +1,256 @@
+.page.audit-log-container .audit-log-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.page.audit-log-container .audit-log-header .filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page.audit-log-container .audit-log-header select {
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  height: 2rem;
+  background: #686868;
+  padding: 0.5rem;
+  background-size: 0.7rem;
+  cursor: pointer;
+  min-width: 5rem;
+  transition: background-color 0.3s;
+  font-family: inherit;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page.audit-log-container .audit-log-header .refresh-btn {
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  height: 2rem;
+  background: #686868;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  font-size: 1rem;
+  margin-left: auto;
+}
+
+.page.audit-log-container .audit-log-header .refresh-btn:hover,
+.page.audit-log-container .audit-log-header select:hover {
+  background: #555;
+}
+
+.page.audit-log-container .audit-log-header .refresh-btn .icon {
+  font-size: 1.3rem;
+}
+
+.page.audit-log-container .log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.page.audit-log-container .log-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  background: #e9e8e8;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.page.audit-log-container .log-item:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.page.audit-log-container .log-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.page.audit-log-container .log-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.page.audit-log-container .log-item:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.page.audit-log-container .log-item:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.page.audit-log-container .log-item:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+.page.audit-log-container .log-item:nth-child(n+7) {
+  animation-delay: 0.6s;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page.audit-log-container .log-item-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  font-size: 1.2rem;
+}
+
+.page.audit-log-container .log-list .log-item .log-icon {
+  color: #333;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  border: 0.15rem solid white;
+}
+
+.page.audit-log-container .log-list .log-item .log-icon .add {
+  color: #369731;
+}
+
+.page.audit-log-container .log-list .log-item .log-icon .update {
+  color: #b3b3b3;
+}
+
+.page.audit-log-container .log-list .log-item .log-icon .delete {
+  color: #e75757;
+}
+
+.page.audit-log-container .log-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.page.audit-log-container .log-user {
+  font-weight: bold;
+  color: #333;
+}
+
+.page.audit-log-container .log-action {
+  color: #333;
+}
+
+.page.audit-log-container .log-action .user {
+  font-weight: bold;
+}
+
+.page.audit-log-container .log-timestamp {
+  color: #999;
+}
+
+.page.audit-log-container .log-expand-icon {
+  color: #333;
+  font-size: 2rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.page.audit-log-container .log-expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.page.audit-log-container .log-details-expanded {
+  margin-top: 0.5rem;
+  padding-left: 5rem;
+  color: #666;
+  overflow: hidden;
+  transition: height 0.3s ease-out;
+  font-family: consolas, monospace;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.page.audit-log-container .log-details-expanded.create {
+  color: #369731;
+}
+
+.page.audit-log-container .log-details-expanded.update {
+  color: #b3b3b3;
+}
+
+.page.audit-log-container .log-details-expanded.delete {
+  color: #e75757;
+}
+
+.page.audit-log-container .log-details-expanded ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page.audit-log-container .log-details-expanded li {
+  margin: 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+  .page.audit-log-container .audit-log-container {
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    margin-bottom: 0;
+  }
+
+  .page.audit-log-container .audit-log-header {
+    justify-content: space-around;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+  }
+
+  .page.audit-log-container .log-item {
+    padding: 0.5rem;
+  }
+
+  .page.audit-log-container .audit-log-header .refresh-btn {
+    margin-left: 0;
+  }
+
+  .page.audit-log-container .log-item {
+    padding-left: 0.5rem;
+  }
+
+  .page.audit-log-container .log-item-header {
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .page.audit-log-container .log-details-expanded {
+    padding-left: 2rem;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+}

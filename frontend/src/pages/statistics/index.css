@@ -1,0 +1,51 @@
+.page .stats-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.page .stats-nav-btn {
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #333;
+  transition: all 0.5s;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.page .stats-nav-btn span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 100%;
+}
+
+.page .stats-nav-btn .stats-nav-icon {
+  font-size: 1.5rem;
+}
+
+.page .stats-nav-btn.active {
+  background: #4e82f2;
+  color: white;
+}
+
+.page .stats-nav-btn:not(.active):hover {
+  background: #cdcdcd;
+}
+
+@media screen and (max-width: 768px) {
+  .page .stats-navigation {
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+
+  .page .stats-nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

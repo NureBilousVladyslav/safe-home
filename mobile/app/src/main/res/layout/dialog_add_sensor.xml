@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_add_home"
+    android:paddingTop="10dp"
+    style="@style/dialog" >
+
+    <TextView
+        style="@style/TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:text="@string/newSensor"
+        android:padding="4dp" />
+
+    <TextView
+        style="@style/TextView"
+        android:layout_marginStart="30dp"
+        android:text="@string/name"
+        android:padding="4dp" />
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardViewField">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/nameEditText"
+                style="@style/EditText"
+                android:autofillHints="postalAddress"
+                android:hint="@string/sensor_name"
+                android:inputType="textPostalAddress" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        style="@style/TextView"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+        android:text="@string/type"
+        android:padding="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/windowButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="0dp"
+            android:text="@string/window"
+            android:textAllCaps="false"
+            style="@style/CustomMaterialButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/doorButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="15dp"
+            android:text="@string/door"
+            android:textAllCaps="false"
+            style="@style/CustomMaterialButton" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp" >
+
+        <TextView
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_gravity="end"
+            android:text="@string/cancel"
+            android:textColor="#3A3A3A"
+            android:backgroundTint="#CECECE"
+            style="@style/TextView" />
+
+        <TextView
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:text="@string/save"
+            android:textColor="#3A3A3A"
+            android:backgroundTint="#CECECE"
+            style="@style/TextView" />
+
+    </LinearLayout>
+
+</LinearLayout>

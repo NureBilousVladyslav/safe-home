@@ -1,0 +1,19 @@
+.page .subsctription-chart {
+  overflow-y: auto;
+}
+
+.page .subsctription-chart .chart {
+  max-height: calc(100% - 2rem);
+}
+
+.page .subsctription-chart h3 {
+  font-weight: 500;
+  margin: 0.5rem;
+  margin-left: 5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .page .subsctription-chart h3 {
+    margin-left: 2rem;
+  }
+}

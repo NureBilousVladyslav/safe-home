@@ -1,0 +1,170 @@
+.navigation .navigation-container .user-panel {
+  margin-top: auto;
+  position: relative;
+  max-width: 250px;
+}
+
+.navigation p {
+  line-height: 100%;
+}
+
+.navigation .user-panel .user-header {
+  background: #D5D5D5;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  min-height: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.navigation .user-panel .user-header .icon {
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+  cursor: pointer;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.8rem;
+  color: #333;
+}
+
+.navigation .user-panel .user-header .icon.open {
+  transform: rotate(180deg);
+}
+
+.navigation .user-panel .user-header .accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.8s ease;
+}
+
+.navigation .user-panel .user-header .accordion-content.open {
+  max-height: 300px;
+}
+
+.navigation .user-panel .user-header p {
+  color: #333;
+  margin: 0;
+}
+
+.navigation .user-panel .user-header .name {
+  font-size: 1.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.navigation .user-panel .user-header .email {
+  font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.navigation .user-panel .logout {
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+}
+
+.navigation .user-panel .user-header .accordion-content .form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.navigation .user-panel .user-header .accordion-content .form-group {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  padding-left: 1rem;
+  background: white;
+  border-radius: 0.5rem;
+  position: relative;
+}
+
+.navigation .user-panel .user-header .accordion-content .form-group .icon {
+  top: 50%;
+  right: 0.7rem;
+  transform: translateY(-50%);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation .user-panel .user-header .accordion-content input,
+.navigation .user-panel .user-header .accordion-content button[type="submit"] {
+  outline: none;
+  border: none;
+  color: #333;
+  border-radius: 0.5rem;
+  height: 2rem;
+}
+
+.navigation .user-panel .user-header .accordion-content button[type="submit"] {
+  margin-bottom: 1rem;
+  background: #222;
+  color: white;
+  font-size: 1rem;
+}
+
+.navigation .user-panel .user-header .accordion-content input {
+  padding: 0;
+}
+
+.navigation .user-panel .user-header .accordion-content input::placeholder {
+  font-size: 1rem;
+}
+
+.navigation .user-panel .user-header .accordion-content .error {
+  padding: 0.5rem;
+  padding-top: 0;
+}
+
+.navigation .navigation-container .user-panel {
+  margin-top: auto;
+  position: relative;
+}
+
+.navigation .user-panel .logout {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .3s;
+  background: #FF8585;
+}
+
+.navigation .user-panel .logout:hover {
+  background: #fd5656;
+}
+
+.navigation .user-panel .logout .icon {
+  height: 2rem;
+  width: 2rem;
+  color: white;
+}
+
+.navigation .user-panel .logout span {
+  font-size: 1.5rem;
+  color: white;
+  user-select: none;
+  padding-left: 0.5rem;
+  width: 30%;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation .user-panel .user-header .name {
+    font-size: 1.4rem;
+    max-width: 90%;
+  }
+
+  .navigation .user-panel .user-header .email {
+    font-size: 1.2rem;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "navigation": {
+    "customers": "клієнти",
+    "admins": "адміністратори",
+    "subscriptions": "підписки",
+    "auditLog": "журнал аудиту",
+    "statistics": "статистика",
+    "logout": "вийти",
+    "oldPassword": "старий пароль",
+    "newPassword": "новий пароль",
+    "changePassword": "Змінити пароль"
+  },
+  "notFound": {
+    "title": "Сторінка не знайдена",
+    "goBack": "Назад на головну сторінку"
+  },
+  "login": {
+    "title": "Увійти в систему",
+    "buttonText": "Увійти",
+    "emailPlaceholder": "електронна пошта",
+    "emailRequired": "Електронна пошта обов'язкова",
+    "passwordPlaceholder": "пароль",
+    "passwordRequired": "Пароль обов'язковий",
+    "passwordMinLength": "Пароль повинен містити не менше 8 символів",
+    "success": "Вхід успішний. Перенаправлення...",
+    "failed": "Не вдалося увійти",
+    "rememberMe": "Запам'ятати мене?",
+    "forgotPassword": "Забули пароль?",
+    "googleLogin": "Увійти через Google"
+  },
+  "error": {
+    "generic": "Сталася помилка. Спробуйте ще раз"
+  },
+  "resetPassword": {
+    "title": "Скидання пароля",
+    "buttonText": "Відправити запит",
+    "emailPlaceholder": "електронна пошта",
+    "emailRequired": "Електронна пошта обов'язкова",
+    "success": "Запит на скидання пароля успішно відправлений. Перенаправлення...",
+    "failed": "Не вдалося надіслати запит на скидання пароля",
+    "instruction": "Перевірте свою електронну пошту для отримання інструкцій щодо скидання пароля"
+  },
+  "editPlanForm": {
+    "editPlan": "Редагувати план",
+    "addNewPlan": "Додати новий план",
+    "saveChanges": "Зберегти зміни",
+    "addPlan": "Додати план",
+    "name": "Назва",
+    "maxHomes": "Макс. будинків",
+    "maxSensors": "Макс. датчиків",
+    "price": "Ціна",
+    "duration": "Тривалість (дні)",
+    "nameRequired": "Назва є обов'язковою",
+    "priceRequired": "Ціна є обов'язковою",
+    "pricePattern": "Введіть правильну ціну (наприклад, 10.99)",
+    "planUpdatedSuccessfully": "План успішно оновлено!",
+    "planAddedSuccessfully": "План успішно додано!",
+    "failedToSavePlan": "Не вдалося зберегти план"
+  },
+  "registerForm": {
+    "addNewAdmin": "Додати адміністратора",
+    "register": "Зареєструвати",
+    "name": "ім'я",
+    "email": "електронна пошта",
+    "password": "пароль",
+    "nameRequired": "Ім'я є обов'язковим",
+    "emailRequired": "Електронна пошта є обов'язковою",
+    "passwordRequired": "Пароль є обов'язковим",
+    "passwordMinLength": "Пароль повинен містити не менше 8 символів",
+    "adminAddedSuccessfully": "Адміністратора успішно додано!",
+    "failedToRegisterAdmin": "Не вдалося зареєструвати адміністратора"
+  },
+  "admins": {
+    "name": "Ім'я",
+    "email": "Електронна пошта",
+    "createdAt": "Дата створення",
+    "deleteAdmin": "Видалити",
+    "adminDeleted": "Адміністратора успішно видалено",
+    "deleteAdminConfirmation": "Ви впевнені, що хочете видалити цього адміністратора?",
+    "confirm": "Підтвердити",
+    "cancel": "Скасувати"
+  },
+  "customers": {
+    "title": "Користувачі",
+    "name": "Ім'я",
+    "email": "Email",
+    "currentSubscription": "Поточний план підписки",
+    "createdAt": "Дата створення",
+    "goToUser": "До підписок",
+    "deleteUser": "Видалити",
+    "userDeleted": "Користувача успішно видалено",
+    "deleteUserConfirmation": "Ви впевнені, що хочете видалити цього користувача?",
+    "confirm": "Підтвердити",
+    "cancel": "Скасувати"
+  },
+  "notification": {
+    "failedToDeleteUser": "Не вдалося видалити користувача",
+    "failedToDeleteAdmin": "Не вдалося видалити адміністратора",
+    "passwordUpdated": "Пароль успішно оновлено",
+    "passwordUpdateFailed": "Не вдалося оновити пароль"
+  },
+  "subscriptions": {
+    "title": "Підписки",
+    "name": "Назва",
+    "maxHomes": "Макс. будинків",
+    "maxSensors": "Макс. сенсорів",
+    "price": "Ціна ($)",
+    "duration": "Тривалість (дні)",
+    "edit": "Редагувати",
+    "planUpdated": "План підписки успішно оновлено",
+    "addNewPlan": "Додати новий план"
+  },
+  "userSubscriptions": {
+    "title": "Підписки користувача",
+    "subscriptionPlan": "План підписки",
+    "startDate": "Дата початку",
+    "endDate": "Дата закінчення",
+    "status": "Статус",
+    "active": "Активна",
+    "inactive": "Неактивна",
+    "cancel": "Скасувати",
+    "subscriptionCanceled": "Підписка успішно скасована",
+    "cancelFailed": "Не вдалося скасувати підписку"
+  },
+  "tablePage": {
+    "loading": "Завантаження",
+    "error": "Не вдалося завантажити дані",
+    "addNew": "додати нове"
+  },
+  "auditLog": {
+    "admin": "Адмін:",
+    "action": "Дія:",
+    "days": "Дні:",
+    "refresh": "Оновити",
+    "error": "Помилка завантаження логів"
+  },
+  "stats": {
+    "userCount": "Кількість клієнтів",
+    "subscriptionPlans": "Плани підписок",
+    "userCountByPlans": "Кількість клієнтів за підписками"
+  },
+  "charts": {
+    "daysLabel": "Дні",
+    "dateAxis": "Дата",
+    "userCountAxis": "Кількість клієнтів",
+    "planNameAxis": "План",
+    "userCount": "Кількість клієнтів",
+    "avgHomes": "Середня кількість будинків",
+    "avgSensors": "Середня кількість сенсорів",
+    "planMaxHomes": "Макс. будинків",
+    "planMaxSensors": "Макс. сенсорів",
+    "userCountTitle": "Кількість клієнтів за підпискою",
+    "homesComparisonTitle": "Порівняння використаних ресурсів: середнє vs макс. домів",
+    "sensorsComparisonTitle": "Порівняння використаних ресурсів: середнє vs макс. сенсорів",
+    "homesAxis": "Кількість будинків",
+    "sensorsAxis": "Кількість сенсорів"
+  }
+}

@@ -1,0 +1,59 @@
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-container.form-spinner {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.spinner-container.form-spinner .spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.spinner-path {
+  stroke-dasharray: 73.31 177.89;
+  stroke-dashoffset: 0;
+  animation: grow 2s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes grow {
+  0% {
+    stroke-dasharray: 73.31 177.89;
+  }
+
+  50% {
+    stroke-dasharray: 125.6 125.6;
+  }
+
+  100% {
+    stroke-dasharray: 251.2 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .spinner-container .spinner {
+    font-size: 70px;
+  }
+}

@@ -1,0 +1,75 @@
+.user-count-chart {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.user-count-chart .chart {
+  max-height: calc(100% - 8rem);
+  max-width: calc(100% - 2rem);
+  padding: 0;
+}
+
+.user-count-chart .action-panel {
+  background: #333;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.user-count-chart .action-panel label {
+  font-size: 1.2rem;
+}
+
+.user-count-chart .action-panel input[type='number'] {
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  padding: 0 0.5rem;
+  font-family: inherit;
+}
+
+.user-count-chart .action-panel input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-count-chart .action-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  margin-top: -0.4rem;
+}
+
+.user-count-chart .action-panel input[type="range"]::-webkit-slider-runnable-track {
+  background: rgb(108, 122, 231);
+  background-size: calc((var(--value, 0) - 1) * (100% - 1px) / 29) 100%;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.user-count-chart .action-panel input[type="range"]:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 768px) {
+  .user-count-chart .action-panel {
+    margin: 0;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}

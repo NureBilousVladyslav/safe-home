@@ -1,0 +1,158 @@
+{
+  "navigation": {
+    "customers": "customers",
+    "admins": "admins",
+    "subscriptions": "subscriptions",
+    "auditLog": "audit log",
+    "statistics": "statistics",
+    "logout": "logout",
+    "oldPassword": "old password",
+    "newPassword": "new password",
+    "changePassword": "Change password"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "goBack": "Back to main page"
+  },
+  "login": {
+    "title": "Enter a system",
+    "buttonText": "Login",
+    "emailPlaceholder": "email",
+    "emailRequired": "Email is required",
+    "passwordPlaceholder": "password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "success": "Login successful. Redirecting...",
+    "failed": "Login failed",
+    "rememberMe": "Remember me?",
+    "forgotPassword": "Forgot password?",
+    "googleLogin": "Login with Google"
+  },
+  "error": {
+    "generic": "An error occurred. Please try again"
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "buttonText": "Send a request",
+    "emailPlaceholder": "email",
+    "emailRequired": "Email is required",
+    "success": "Password reset request sent successfully. Redirecting...",
+    "failed": "Failed to send reset password request",
+    "instruction": "Please check your email for instructions to reset your password"
+  },
+  "editPlanForm": {
+    "editPlan": "Edit plan",
+    "addNewPlan": "Add new plan",
+    "saveChanges": "Save changes",
+    "addPlan": "Add plan",
+    "name": "Name",
+    "maxHomes": "Max homes",
+    "maxSensors": "Max sensors",
+    "price": "Price",
+    "duration": "Duration (days)",
+    "nameRequired": "Name is required",
+    "priceRequired": "Price is required",
+    "pricePattern": "Enter a valid price (e.g., 10.99)",
+    "planUpdatedSuccessfully": "Plan updated successfully!",
+    "planAddedSuccessfully": "Plan added successfully!",
+    "failedToSavePlan": "Failed to save plan."
+  },
+  "registerForm": {
+    "addNewAdmin": "Add new admin",
+    "register": "Register",
+    "name": "name",
+    "email": "email",
+    "password": "password",
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "adminAddedSuccessfully": "Admin added successfully!",
+    "failedToRegisterAdmin": "Failed to register admin"
+  },
+  "admins": {
+    "name": "Name",
+    "email": "Email",
+    "createdAt": "Created at",
+    "deleteAdmin": "Delete",
+    "adminDeleted": "Admin deleted successfully",
+    "deleteAdminConfirmation": "Are you sure you want to delete this admin?",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "customers": {
+    "title": "Customers",
+    "name": "Name",
+    "email": "Email",
+    "currentSubscription": "Current subscription",
+    "createdAt": "Created at",
+    "goToUser": "Go to user",
+    "deleteUser": "Delete user",
+    "userDeleted": "User deleted successfully",
+    "deleteUserConfirmation": "Are you sure you want to delete this user?",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "notification": {
+    "failedToDeleteUser": "Failed to delete user",
+    "failedToDeleteAdmin": "Failed to delete admin",
+    "passwordUpdated": "Password updated successfully",
+    "passwordUpdateFailed": "Failed to update password"
+  },
+  "subscriptions": {
+    "title": "Subscriptions",
+    "name": "Name",
+    "maxHomes": "Max homes",
+    "maxSensors": "Max sensors",
+    "price": "Price ($)",
+    "duration": "Duration (days)",
+    "edit": "Edit",
+    "planUpdated": "Subscription plan updated successfully",
+    "addNewPlan": "Add new plan"
+  },
+  "userSubscriptions": {
+    "title": "User Subscriptions",
+    "subscriptionPlan": "Subscription plan",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Not active",
+    "cancel": "Cancel",
+    "subscriptionCanceled": "Subscription canceled successfully",
+    "cancelFailed": "Failed to cancel subscription"
+  },
+  "tablePage": {
+    "loading": "Loading",
+    "error": "Failed to load data",
+    "addNew": "add new"
+  },
+  "auditLog": {
+    "admin": "Admin:",
+    "action": "Action:",
+    "days": "Days:",
+    "refresh": "Refresh",
+    "error": "Error loading logs"
+  },
+  "stats": {
+    "userCount": "User count",
+    "subscriptionPlans": "Subscription plans",
+    "userCountByPlans": "User count by subscriptions"
+  },
+  "charts": {
+    "daysLabel": "Days",
+    "dateAxis": "Date",
+    "userCountAxis": "User count",
+    "planNameAxis": "Plan",
+    "userCount": "User count",
+    "avgHomes": "Average homes",
+    "avgSensors": "Average sensors",
+    "planMaxHomes": "Max homes",
+    "planMaxSensors": "Max sensors",
+    "userCountTitle": "Users count by subscription",
+    "homesComparisonTitle": "Comparison of used resources: average vs max homes",
+    "sensorsComparisonTitle": "Comparison of used resources: average vs max sensors",
+    "homesAxis": "Number of homes",
+    "sensorsAxis": "Number of sensors"
+  }
+}

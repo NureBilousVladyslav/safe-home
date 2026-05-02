@@ -1,0 +1,11 @@
+# Wokwi Library List
+# See https://docs.wokwi.com/guides/libraries
+
+DHT sensor library for ESPx
+ThingSpeak
+PIR
+ESP32_easy_wifi_data
+ESP32Servo
+Servo
+BlynkESP32_BT_WF
+ArduinoJson

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_homes">
+
+    <fragment
+        android:id="@+id/navigation_homes"
+        android:name="com.example.safehome.presentation.main.fragments.HomesFragment"
+        android:label="@string/title_homes_fragment"
+        tools:layout="@layout/fragment_homes" >
+        <action
+            android:id="@+id/action_navigation_homes_to_navigation_notification"
+            app:destination="@id/navigation_notification" />
+        <action
+            android:id="@+id/action_navigation_homes_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_navigation_homes_to_navigation_sensor"
+            app:destination="@id/navigation_sensor" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_sensor"
+        android:name="com.example.safehome.presentation.main.fragments.SensorFragment"
+        android:label="@string/title_sensor_fragment"
+        tools:layout="@layout/fragment_sensor" />
+
+    <fragment
+        android:id="@+id/navigation_notification"
+        android:name="com.example.safehome.presentation.main.fragments.NotificationFragment"
+        android:label="@string/title_notification_fragment"
+        tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.safehome.presentation.main.fragments.ProfileFragment"
+        android:label="@string/title_profile_fragment"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.safehome.presentation.main.fragments.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_changePasswordFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+</navigation>

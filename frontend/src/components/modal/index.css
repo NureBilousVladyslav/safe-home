@@ -1,0 +1,163 @@
+.modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.form,
+.modal.dialog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal.form .overlay,
+.modal.dialog .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+}
+
+.modal.form .content,
+.modal.dialog .content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.dialog .content,
+.modal.notification .content {
+  padding: 1rem;
+}
+
+.modal .content {
+  background: white;
+  border-radius: 2rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: fit-content;
+  position: relative;
+  z-index: 1001;
+}
+
+.modal.dialog .content {
+  flex-direction: column;
+}
+
+.modal.dialog .content p {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.modal .dialog-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal .dialog-buttons .cancel-btn,
+.modal .dialog-buttons .confirm-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.modal .dialog-buttons .cancel-btn {
+  background: #ccc;
+}
+
+.modal .dialog-buttons .confirm-btn {
+  background: red;
+  color: white;
+}
+
+.modal.notification {
+  position: fixed;
+  bottom: 3rem;
+  right: 3rem;
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  z-index: 1002;
+}
+
+.modal.notification p {
+  margin: 0;
+  line-height: 100%;
+  font-size: 1.2rem;
+}
+
+.modal.notification .content {
+  background: #333;
+  color: white;  
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: unset;
+  text-align: center;
+  max-width: 400px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.modal .close-btn {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal .close-btn:hover {
+  transform: scale(1.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal .content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  .modal.notification {
+    position: fixed;
+    bottom: 3rem;
+    right: 50%;
+    transform: translateX(50%);
+    z-index: 1002;
+  }
+
+  .modal.notification .content {
+    background: #333;
+    color: white;
+    border-radius: 1rem;
+    text-align: center;
+    width: calc(100vw - 5rem);
+  }
+}

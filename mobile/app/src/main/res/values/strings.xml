@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">Safe home</string>
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_launch">LaunchActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
+    <string name="error_image">Error :(</string>
+
+    <!-- SignInFragment -->
+    <string name="title_sign_in_fragment">Welcome!</string>
+    <string name="email">Email</string>
+    <string name="email_hint">email@gmail.com</string>
+    <string name="password">Password</string>
+    <string name="password_hint">********</string>
+    <string name="sign_in_button">Log In</string>
+    <string name="or">Or</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up_button">Create an account</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+
+    <!-- SignUpFragment -->
+    <string name="title_sign_up_fragment">Create Account</string>
+    <string name="full_name">Name Surname</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="date">MM DD YYYY</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="terms_and_policy">By continuing, you agree to \nTerms of Use and Privacy Policy.</string>
+    <string name="select_date">Choose your date of birth</string>
+    <string name="ok">OK</string>
+
+    <!-- ResetPswdFragment -->
+    <string name="title_reset_pswd_fragment">Reset password</string>
+    <string name="forgot_description">Enter your email address to reset your password. After confirming your email, you will receive a new password in your mail.</string>
+    <string name="email_enter">Enter email address</string>
+    <string name="send">Send</string>
+
+    <!-- HomesFragment -->
+    <string name="title_homes_fragment">Homes</string>
+    <string name="home_name">My home</string>
+    <string name="address_home">1234 Elm Street, Apt 56B, Los Angeles</string>
+    <string name="status_armed">Armed</string>
+    <string name="status_disarmed">Disarmed</string>
+    <string name="status_custom">Custom</string>
+    <string name="homes_empty">There are no houses</string>
+
+    <!-- SensorFragment -->
+    <string name="title_sensor_fragment">Home</string>
+    <string name="my_sensors">My sensors</string>
+    <string name="archive">Archive</string>
+    <string name="paring_code">2S83J6d</string>
+    <string name="sensors_empty">There are no sensors</string>
+
+    <!-- NotificationFragment -->
+    <string name="title_notification_fragment">Notification</string>
+    <string name="notification_title">My notification</string>
+    <string name="notification_body">Alarm!!!</string>
+    <string name="notification_date">17:00 June 13</string>
+    <string name="general">General</string>
+    <string name="security">Security</string>
+
+    <!-- ProfileFragment -->
+    <string name="title_profile_fragment">Profile</string>
+    <string name="profile_name">Vladislav</string>
+    <string name="profile_date">21 / 02 / 2005</string>
+    <string name="profile_edit">Edit Profile</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_help">Help</string>
+    <string name="profile_logout">Logout</string>
+    <string name="subscriptions">Subscriptions</string>
+
+    <!-- ChangePasswordFragment -->
+    <string name="title_change_password_fragment">Change Password</string>
+    <string name="new_pswd">New password</string>
+    <string name="current_pswd">Current password</string>
+    <string name="subscribe_type">Basic</string>    
+
+
+    <!-- DialogAddHome -->
+    <string name="newHome">New home</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+
+    <!-- DialogAddSensor -->
+    <string name="newSensor">New sensor</string>
+    <string name="sensor_name">My sensor</string>
+    <string name="type">Type</string>
+    <string name="window">Window</string>
+    <string name="door">Door</string>
+
+    <!-- DialogLogout -->
+    <string name="dialog_logout_title">Do you really want to leave?</string>
+    <string name="dialog_logout_body">Are you sure you want to leave? You might miss important notifications</string>
+
+
+    <!-- ItemSensor -->
+    <string name="status">Status</string>
+
+
+    <!-- Also -->
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="exit">Exit</string>
+
+</resources>

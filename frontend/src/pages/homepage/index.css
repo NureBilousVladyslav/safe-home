@@ -1,0 +1,495 @@
+.homepage {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: white;
+}
+
+.homepage img {
+  object-fit: cover;
+}
+
+.homepage .header,
+.homepage .content {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.homepage .header {
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.homepage .header h3 {
+  font-weight: 500;
+  margin: 0;
+}
+
+.homepage .header .login-link {
+  margin-left: auto;
+  margin-right: 1rem;
+  background-color: #1b8ce2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.homepage .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.homepage .content .footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  color: white;
+  height: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .footer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .footer p {
+  font-size: 0.9rem;
+  color: #666666;
+}
+
+.homepage .content .main-content {
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.homepage .content .main-content h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: rgb(89, 127, 232);
+  margin: 0;
+}
+
+.homepage .content .main-content p {
+  font-size: 1.8rem;
+}
+
+.homepage .content .main-content .intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .intro.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .intro .left-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepage .content .main-content .intro .home-logo {
+  border-radius: 1rem;
+  width: 100%;
+  max-height: 50vh;
+  object-fit: cover;
+  place-self: end;
+}
+
+.homepage .content .main-content .intro .download-mobile-app {
+  background-color: #0f2671;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.homepage .content .main-content .intro .download-mobile-app:hover {
+  background-color: #0b1a4d;
+}
+
+.homepage .content .main-content .features {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .features.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .features .left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.homepage .content .main-content .features .right-column .mobile-app-image {
+  border-radius: 1rem;
+  width: auto;
+  height: 100%;
+  place-self: center;
+  clip-path: path("M0,0 Q30,150 0,300 Q30,450 0,600 Q30,750 0,900 Q30,1050 0,1100 L600,1100 L600,0 Z");
+  -webkit-clip-path: path("M0,0 Q30,150 0,300 Q30,450 0,600 Q30,750 0,900 Q30,1050 0,1100 L600,1100 L600,0 Z");
+  overflow: hidden;
+}
+
+.homepage .content .main-content .features h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: rgb(9, 38, 120);
+  margin: 0;
+  margin-left: 1rem;
+}
+
+.homepage .content .main-content .features .feature {
+  background-color: rgb(186, 227, 253);
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .features .feature.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .features .feature h3,
+.homepage .content .main-content .features .feature p {
+  margin: 0;
+}
+
+.homepage .content .main-content .features .feature h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: rgb(6, 28, 87);
+}
+
+.homepage .content .main-content .features .feature p {
+  font-size: 1.3rem;
+  color: rgb(26, 47, 107);
+}
+
+.homepage .content .main-content .advantages {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  gap: 1rem;
+  background-color: rgb(26, 47, 107);
+  color: white;
+  padding: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .advantages.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .advantages h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  margin-left: 1rem;
+}
+
+.homepage .content .main-content .advantages .list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.homepage .content .main-content .advantages .advantage {
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .advantages .advantage.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .advantages .advantage .icon {
+  display: flex;
+  align-items: center;
+  font-size: 4rem;
+  color: #87c7ff;
+}
+
+.homepage .content .main-content .advantages .advantage h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.homepage .content .main-content .advantages .advantage p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.homepage .content .main-content .about-project {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .about-project.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .about-project .columns {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.homepage .content .main-content .about-project .columns .left-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepage .content .main-content .about-project .columns .left-column .about-project-image {
+  width: auto;
+  height: 600px;
+  border-radius: 1rem;
+}
+
+.homepage .content .main-content .about-project .columns .right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.homepage .content .main-content .about-project .columns .right-column h2 {
+  font-size: 3rem;
+  font-weight: 600;
+  color: rgb(5, 22, 68);
+  margin: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .about-project .columns .right-column h2.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list .item {
+  width: 50%;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list .item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list .item h3 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: rgb(26, 47, 107);
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list .item p {
+  font-size: 1.2rem;
+  color: rgb(26, 47, 107);
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+.homepage .content .main-content .about-project .columns .right-column .list .item .square {
+  font-size: 3rem;
+  color: rgb(89, 127, 232);
+}
+
+@media screen and (max-width: 1200px) {
+  .homepage .header,
+  .homepage .content {
+    width: stretch;
+    padding: 0 1rem;
+    margin: 1rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .homepage .content .main-content {
+    gap: 2rem;
+  }
+
+  .homepage .header {
+    margin-bottom: 0;
+  }
+
+  .homepage .header .login-link {
+    margin-right: 0;
+  }
+
+  .homepage .content {
+    padding: 0;
+  }
+
+  .homepage .content .main-content {
+    padding: 1rem;
+  }
+
+  .homepage .content .main-content .intro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .homepage .content .main-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .homepage .content .main-content p {
+    font-size: 1.2rem;
+  }
+
+  .homepage .content .main-content .intro .right-column {
+    justify-content: center;
+    align-items: flex-start;
+    display: none;
+  }
+
+  .homepage .content .main-content .intro .home-logo {
+    width: auto;
+    max-height: 40vh;
+  }
+
+  .homepage .content .main-content .features {
+    padding: 0;
+  }
+
+  .homepage .content .main-content .features h2 {
+    font-size: 1.8rem;
+  }
+
+  .homepage .content .main-content .features .feature h3 {
+    font-size: 1.6rem;
+  }
+
+  .homepage .content .main-content .features .feature p {
+    font-size: 1.1rem;
+  }
+
+  .homepage .content .main-content .features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .homepage .content .main-content .features .right-column {
+    display: none;
+  }
+
+  .homepage .content .main-content .advantages h2 {
+    font-size: 1.3rem;
+    margin: 0;
+    margin-left: 1rem;
+  }
+
+  .homepage .content .main-content .advantages .advantage .icon {
+    font-size: 2.5rem;
+  }
+
+  .homepage .content .main-content .advantages .advantage h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .homepage .content .main-content .advantages .advantage p {
+    font-size: 0.9rem;
+  }
+
+  .homepage .content .main-content .about-project .columns {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .homepage .content .main-content .about-project .columns .left-column .about-project-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .homepage .content .main-content .about-project .columns .right-column h2 {
+    font-size: 2rem;
+  }
+
+  .homepage .content .main-content .about-project .columns .right-column .list .item h3 {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+  }
+
+  .homepage .content .main-content .about-project .columns .right-column .list .item p {
+    font-size: 1rem;
+    margin: 1rem 0;
+  }
+
+  .homepage .content .main-content .about-project .columns .right-column .list .item .square {
+    font-size: 2rem;
+  }
+
+  .homepage .content .main-content .about-project .columns .right-column .list .item {
+    width: unset;
+    flex: 1;
+  }
+}
