@@ -74,7 +74,38 @@
     <string name="title_change_password_fragment">Change Password</string>
     <string name="new_pswd">New password</string>
     <string name="current_pswd">Current password</string>
-    <string name="subscribe_type">Basic</string>    
+    <string name="subscribe_type">Basic</string>
+
+    <!-- Biometric -->
+    <string name="biometric_enrollment_progress">%1$s\nЗбір даних: %2$d/%3$d</string>
+    <string name="biometric_see_camera">Look into the camera</string>
+    <string name="biometric_position_face">Position your face in the frame</string>
+    <string name="biometric_camera_access_required">Camera access is required for face recognition</string>
+    <string name="biometric_look_at_camera">Look at the camera</string>
+    <string name="biometric_searching_face">Searching for a face</string>
+    <string name="biometric_verifying_face">Verifying face</string>
+    <string name="biometric_face_recognized">Face recognized</string>
+    <string name="biometric_failed_start_camera">Failed to start camera</string>
+
+    <string name="biometric_face_not_found">Face not found</string>
+    <string name="biometric_face_multiple_faces">There should only be one face in the frame</string>
+    <string name="biometric_face_found">Face found</string>
+    <string name="biometric_face_frame_processing_error">Failed to process frame</string>
+    <string name="biometric_face_crop_error">Unable to crop face</string>
+    <string name="biometric_face_template_verification_error">Biometric template verification error</string>
+    <string name="biometric_face_frame_analysis_error">Frame analysis error</string>
+
+    <string name="biometric_enrollment_look_straight">Look straight at the camera</string>
+    <string name="biometric_enrollment_look_up">Slightly raise your head</string>
+    <string name="biometric_enrollment_look_down">Slightly lower your head</string>
+    <string name="biometric_enrollment_turn_left">Slightly turn your head left</string>
+    <string name="biometric_enrollment_turn_right">Slightly turn your head right</string>
+
+    <string name="biometric_enrollment_camera_access_required">Camera access is required for face enrollment</string>
+    <string name="biometric_enrollment_saving_template">Saving biometric template</string>
+    <string name="biometric_enrollment_enabled">Biometric login has been enabled</string>
+
+    <string name="biometric_face_template_creation_error">Biometric template creation error</string>
 
 
     <!-- DialogAddHome -->
