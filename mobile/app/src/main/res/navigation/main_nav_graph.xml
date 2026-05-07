@@ -39,16 +39,21 @@
         android:label="@string/title_profile_fragment"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_navigation_profile_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            android:id="@+id/action_navigation_profile_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.example.safehome.presentation.main.fragments.ChangePasswordFragment"
         android:label="fragment_change_password"
-        tools:layout="@layout/fragment_change_password" >
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.safehome.presentation.main.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_changePasswordFragment_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            android:id="@+id/action_settingsFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
 </navigation>

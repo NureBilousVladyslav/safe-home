@@ -13,11 +13,11 @@ class NetworkHandler(private val context: Context) {
     suspend fun <T> safeApiCall(apiCall: suspend () -> T): Result<T> {
         return try {
             if (!isNetworkAvailable()) {
-                Timber.Forest.e("No network connection")
+                Timber.e("No network connection")
                 return Result.Error(ErrorType.NetworkError("No internet connection"))
             }
             val response = apiCall()
-            Timber.Forest.d("API call successful: $response")
+            Timber.d("API call successful: $response")
             Result.Success(response)
         } catch (e: HttpException) {
             val code = e.code()
@@ -29,13 +29,13 @@ class NetworkHandler(private val context: Context) {
                 500 -> "Server Error"
                 else -> "Unknown Error ${e.code()}: ${e.message}"
             }
-            Timber.Forest.e(e, "Server error: $message, code: $code")
+            Timber.e(e, "Server error: $message, code: $code")
             Result.Error(ErrorType.ServerError(message, code))
         } catch (e: IOException) {
-            Timber.Forest.e(e, "Network error: ${e.message}")
+            Timber.e(e, "Network error: ${e.message}")
             Result.Error(ErrorType.NetworkError("Failed to connect to server"))
         } catch (e: Exception) {
-            Timber.Forest.e(e, "Internal error: ${e.message}")
+            Timber.e(e, "Internal error: ${e.message}")
             Result.Error(ErrorType.InternalError("Unexpected error: ${e.message}"))
         }
     }

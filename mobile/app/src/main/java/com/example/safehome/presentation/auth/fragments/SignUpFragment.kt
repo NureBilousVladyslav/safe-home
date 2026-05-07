@@ -65,7 +65,7 @@ class SignUpFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -105,8 +105,8 @@ class SignUpFragment : Fragment() {
             binding.apply {
                 val name = giveTextFromEditText(nameEditText)
                 val email = giveTextFromEditText(emailEditText)
-                val password = giveTextFromEditText(pswdEditText)
-                val confirmPassword = giveTextFromEditText(pswdConfirmEditText)
+                val password = giveTextFromEditText(passwordEditText)
+                val confirmPassword = giveTextFromEditText(passwordConfirmEditText)
                 val date = datePickerViewModel.selectedDate.value
 
                 signUpViewModel.registerUser(
@@ -124,12 +124,12 @@ class SignUpFragment : Fragment() {
 
         binding.eyeButton.setOnClickListener {
             _isPasswordVisible = !_isPasswordVisible
-            PasswordVisibilityUtils.togglePasswordVisibility(binding.pswdEditText, binding.eyeButton, _isPasswordVisible)
+            PasswordVisibilityUtils.togglePasswordVisibility(binding.passwordEditText, binding.eyeButton, _isPasswordVisible)
         }
 
         binding.eyeConfirmButton.setOnClickListener {
             _isConfirmPasswordVisible = !_isConfirmPasswordVisible
-            PasswordVisibilityUtils.togglePasswordVisibility(binding.pswdConfirmEditText, binding.eyeConfirmButton, _isConfirmPasswordVisible)
+            PasswordVisibilityUtils.togglePasswordVisibility(binding.passwordConfirmEditText, binding.eyeConfirmButton, _isConfirmPasswordVisible)
         }
     }
 

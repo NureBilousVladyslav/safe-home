@@ -28,10 +28,9 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="terms_and_policy">By continuing, you agree to \nTerms of Use and Privacy Policy.</string>
     <string name="select_date">Choose your date of birth</string>
-    <string name="ok">OK</string>
 
-    <!-- ResetPswdFragment -->
-    <string name="title_reset_pswd_fragment">Reset password</string>
+    <!-- ResetPasswordFragment -->
+    <string name="title_reset_password_fragment">Reset password</string>
     <string name="forgot_description">Enter your email address to reset your password. After confirming your email, you will receive a new password in your mail.</string>
     <string name="email_enter">Enter email address</string>
     <string name="send">Send</string>
@@ -53,6 +52,9 @@
     <string name="sensors_empty">There are no sensors</string>
 
     <!-- NotificationFragment -->
+    <string name="notification_permission_title">Notification permission required</string>
+    <string name="notification_permission_message">Allow notification access in phone settings</string>
+
     <string name="title_notification_fragment">Notification</string>
     <string name="notification_title">My notification</string>
     <string name="notification_body">Alarm!!!</string>
@@ -70,13 +72,23 @@
     <string name="profile_logout">Logout</string>
     <string name="subscriptions">Subscriptions</string>
 
+    <!-- SettingsFragment -->
+    <string name="title_settings_fragment">Settings</string>
+    <string name="settings_notify_main">Notifications</string>
+    <string name="settings_notify_addition">Turn on notifications</string>
+    <string name="settings_faceId_main">Face ID</string>
+    <string name="settings_faceId_addition">Confirming critical transactions using Face ID</string>
+
     <!-- ChangePasswordFragment -->
     <string name="title_change_password_fragment">Change Password</string>
-    <string name="new_pswd">New password</string>
-    <string name="current_pswd">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="current_password">Current password</string>
     <string name="subscribe_type">Basic</string>
 
     <!-- Biometric -->
+    <string name="biometric_camera_permission_title">Camera permission required</string>
+    <string name="biometric_camera_permission_message">Allow camera access in phone settings</string>
+
     <string name="biometric_enrollment_progress">%1$s\nЗбір даних: %2$d/%3$d</string>
     <string name="biometric_see_camera">Look into the camera</string>
     <string name="biometric_position_face">Position your face in the frame</string>
@@ -132,6 +144,7 @@
     <!-- Also -->
     <string name="delete">Delete</string>
     <string name="save">Save</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="exit">Exit</string>
 

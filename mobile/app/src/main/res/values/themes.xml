@@ -41,6 +41,13 @@
         <item name="android:textSize">36sp</item>
     </style>
 
+    <style name="SmallGrayTextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_grey</item>
+    </style>
+
     <style name="EditText">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

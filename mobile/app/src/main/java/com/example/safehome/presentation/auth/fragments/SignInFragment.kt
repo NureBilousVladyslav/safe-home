@@ -94,7 +94,7 @@ class SignInFragment : Fragment() {
 
         binding.signInButton.setOnClickListener {
             val email = binding.emailEditText.text.toString().trim()
-            val password = binding.pswdEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString().trim()
             authViewModel.checkUserAuthorization(email, password)
         }
 
@@ -103,7 +103,7 @@ class SignInFragment : Fragment() {
             googleSignInLauncher.launch(signInIntent)
         }
 
-        binding.resetPswdButton.setOnClickListener {
+        binding.resetPasswordButton.setOnClickListener {
             navController.navigate(R.id.action_signInFragment_to_resetPasswordFragment)
         }
 
@@ -113,7 +113,7 @@ class SignInFragment : Fragment() {
 
         binding.eyeButton.setOnClickListener {
             _isPasswordVisible = !_isPasswordVisible
-            PasswordVisibilityUtils.togglePasswordVisibility(binding.pswdEditText, binding.eyeButton, _isPasswordVisible)
+            PasswordVisibilityUtils.togglePasswordVisibility(binding.passwordEditText, binding.eyeButton, _isPasswordVisible)
         }
     }
 
