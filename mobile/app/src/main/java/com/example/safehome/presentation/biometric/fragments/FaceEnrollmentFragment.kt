@@ -291,12 +291,52 @@ class FaceEnrollmentFragment : Fragment() {
 
         val currentStep = enrollmentSteps[currentStepIndex]
 
+        // 1. Head rotation test
         if (!currentStep.validator(face)) {
             updateInstructionText()
             isProcessingFrame = false
             return
         }
 
+        val boundingBox = face.boundingBox
+
+        // 2. The face is quite large
+        val faceArea = boundingBox.width() * boundingBox.height()
+        val imageArea = imageProxy.width * imageProxy.height
+        val faceRatio = faceArea.toFloat() / imageArea
+
+        if (faceRatio < 0.13f) {  // ~13% від площі кадру
+            binding.statusTextView.text = getString(R.string.biometric_position_face)
+            isProcessingFrame = false
+            return
+        }
+
+        // 3. The face is fully in the frame (not cropped)
+        if (boundingBox.left < 40 || boundingBox.top < 40 ||
+            boundingBox.right > imageProxy.width - 40 ||
+            boundingBox.bottom > imageProxy.height - 40) {
+
+            binding.statusTextView.text = getString(R.string.biometric_position_face)
+            isProcessingFrame = false
+            return
+        }
+
+        // 4. Well-centered
+        val centerX = (boundingBox.left + boundingBox.right) / 2f
+        val centerY = (boundingBox.top + boundingBox.bottom) / 2f
+        val frameCenterX = imageProxy.width / 2f
+        val frameCenterY = imageProxy.height / 2f
+
+        val offsetX = abs(centerX - frameCenterX) / imageProxy.width
+        val offsetY = abs(centerY - frameCenterY) / imageProxy.height
+
+        if (offsetX > 0.22f || offsetY > 0.22f) {
+            binding.statusTextView.text = getString(R.string.biometric_position_face)
+            isProcessingFrame = false
+            return
+        }
+
+        // Continue
         val now = SystemClock.elapsedRealtime()
         if (now - lastCaptureTimeMs < CAPTURE_DELAY_MS) {
             isProcessingFrame = false
@@ -312,7 +352,7 @@ class FaceEnrollmentFragment : Fragment() {
 
         val faceBitmap = ImageProxyUtils.cropFaceFromBitmap(
             sourceBitmap = sourceBitmap,
-            faceBoundingBox = face.boundingBox
+            faceBoundingBox = boundingBox
         )
 
         if (faceBitmap == null) {
