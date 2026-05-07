@@ -20,4 +20,6 @@
 
     <color name="enabled_button">#4C7AAE</color>
     <color name="disabled_button">#ADC5F1</color>
+
+    <color name="text_grey">#7C7A7A</color>
 </resources>

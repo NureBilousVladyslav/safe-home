@@ -2,6 +2,9 @@ package com.example.safehome.presentation.biometric.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -9,6 +12,7 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -28,6 +32,7 @@ import com.example.safehome.presentation.biometric.utils.FaceUtils
 import com.example.safehome.presentation.biometric.utils.ImageProxyUtils
 import com.example.safehome.presentation.biometric.viewModel.BiometricState
 import com.example.safehome.presentation.biometric.viewModel.BiometricViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetector
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +60,9 @@ class FaceEnrollmentFragment : Fragment() {
 
     @Inject
     lateinit var faceUtils: FaceUtils
+
+    // CameraX
+    private var cameraProvider: ProcessCameraProvider? = null
 
     private val capturedEmbeddings = mutableListOf<FloatArray>()
 
@@ -87,14 +95,14 @@ class FaceEnrollmentFragment : Fragment() {
             }
         ),
         EnrollmentStep(
-            instructionResId = R.string.biometric_enrollment_turn_left,
+            instructionResId = R.string.biometric_enrollment_turn_right,
             validator = { face ->
                 face.headEulerAngleY <= -YAW_MIN_ANGLE &&
                         abs(face.headEulerAngleX) <= SIDE_MAX_PITCH
             }
         ),
         EnrollmentStep(
-            instructionResId = R.string.biometric_enrollment_turn_right,
+            instructionResId = R.string.biometric_enrollment_turn_left,
             validator = { face ->
                 face.headEulerAngleY >= YAW_MIN_ANGLE &&
                         abs(face.headEulerAngleX) <= SIDE_MAX_PITCH
@@ -107,25 +115,20 @@ class FaceEnrollmentFragment : Fragment() {
             if (granted) {
                 startCamera()
             } else {
-                showMessage(getString(R.string.biometric_enrollment_camera_access_required))
-                requireActivity().finish()
+                showCameraPermissionSettingsDialog()
             }
         }
 
     companion object {
-        fun newInstance(): FaceEnrollmentFragment {
-            return FaceEnrollmentFragment()
-        }
+        fun newInstance(): FaceEnrollmentFragment = FaceEnrollmentFragment()
 
         private const val CAPTURES_PER_STEP = 2
         private const val CAPTURE_DELAY_MS = 450L
 
         private const val FRONT_MAX_PITCH = 8f
         private const val FRONT_MAX_YAW = 8f
-
         private const val PITCH_MIN_ANGLE = 10f
         private const val YAW_MIN_ANGLE = 12f
-
         private const val SIDE_MAX_PITCH = 14f
         private const val SIDE_MAX_YAW = 14f
     }
@@ -154,22 +157,15 @@ class FaceEnrollmentFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 BiometricState.Idle -> Unit
-
-                BiometricState.SearchingFace -> {
-                    updateInstructionText()
-                }
-
+                BiometricState.SearchingFace -> updateInstructionText()
                 BiometricState.Processing -> {
-                    binding.statusTextView.text =
-                        getString(R.string.biometric_enrollment_saving_template)
+                    binding.statusTextView.text = getString(R.string.biometric_enrollment_saving_template)
                 }
-
                 BiometricState.EnrollmentSuccess -> {
                     showMessage(getString(R.string.biometric_enrollment_enabled))
                     requireActivity().setResult(Activity.RESULT_OK)
                     requireActivity().finish()
                 }
-
                 BiometricState.VerificationSuccess -> Unit
                 BiometricState.BiometricDisabled -> Unit
 
@@ -184,12 +180,11 @@ class FaceEnrollmentFragment : Fragment() {
     }
 
     private fun checkCameraPermission() {
-        val permissionGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (permissionGranted) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startCamera()
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -200,36 +195,36 @@ class FaceEnrollmentFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            val preview = Preview.Builder()
-                .build()
-                .also { previewUseCase ->
-                    previewUseCase.surfaceProvider = binding.previewView.surfaceProvider
-                }
-
-            val resolutionSelector = ResolutionSelector.Builder()
-                .setResolutionStrategy(
-                    ResolutionStrategy(
-                        Size(720, 1280),
-                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
-                    )
-                )
-                .build()
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setResolutionSelector(resolutionSelector)
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also { analysisUseCase ->
-                    analysisUseCase.setAnalyzer(cameraExecutor) { imageProxy ->
-                        analyzeImage(imageProxy)
-                    }
-                }
-
             try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                cameraProvider = cameraProviderFuture.get()
+
+                val preview = Preview.Builder()
+                    .build()
+                    .also { previewUseCase ->
+                        previewUseCase.surfaceProvider = binding.previewView.surfaceProvider
+                    }
+
+                val resolutionSelector = ResolutionSelector.Builder()
+                    .setResolutionStrategy(
+                        ResolutionStrategy(
+                            Size(720, 1280),
+                            ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                        )
+                    )
+                    .build()
+
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setResolutionSelector(resolutionSelector)
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .also { analysisUseCase ->
+                        analysisUseCase.setAnalyzer(cameraExecutor) { imageProxy ->
+                            analyzeImage(imageProxy)
+                        }
+                    }
+
+                cameraProvider?.unbindAll()
+                cameraProvider?.bindToLifecycle(
                     viewLifecycleOwner,
                     CameraSelector.DEFAULT_FRONT_CAMERA,
                     preview,
@@ -243,7 +238,7 @@ class FaceEnrollmentFragment : Fragment() {
     }
 
     private fun analyzeImage(imageProxy: ImageProxy) {
-        if (isProcessingFrame || isEnrollmentCompleted) {
+        if (_binding == null || !isAdded || isProcessingFrame || isEnrollmentCompleted) {
             imageProxy.close()
             return
         }
@@ -258,30 +253,29 @@ class FaceEnrollmentFragment : Fragment() {
 
         faceDetector.process(inputImage)
             .addOnSuccessListener { faces ->
+                if (_binding == null || !isAdded) {
+                    isProcessingFrame = false
+                    return@addOnSuccessListener
+                }
+
                 when {
                     faces.isEmpty() -> {
-                        binding.statusTextView.text =
-                            getString(R.string.biometric_face_not_found)
+                        binding.statusTextView.text = getString(R.string.biometric_face_not_found)
                         isProcessingFrame = false
                     }
-
                     faces.size > 1 -> {
-                        binding.statusTextView.text =
-                            getString(R.string.biometric_face_multiple_faces)
+                        binding.statusTextView.text = getString(R.string.biometric_face_multiple_faces)
                         isProcessingFrame = false
                     }
-
                     else -> {
-                        processDetectedFace(
-                            imageProxy = imageProxy,
-                            face = faces.first()
-                        )
+                        processDetectedFace(imageProxy, faces.first())
                     }
                 }
             }
             .addOnFailureListener {
-                binding.statusTextView.text =
-                    getString(R.string.biometric_face_frame_analysis_error)
+                if (_binding != null && isAdded) {
+                    binding.statusTextView.text = getString(R.string.biometric_face_frame_analysis_error)
+                }
                 isProcessingFrame = false
             }
             .addOnCompleteListener {
@@ -289,10 +283,12 @@ class FaceEnrollmentFragment : Fragment() {
             }
     }
 
-    private fun processDetectedFace(
-        imageProxy: ImageProxy,
-        face: Face
-    ) {
+    private fun processDetectedFace(imageProxy: ImageProxy, face: Face) {
+        if (_binding == null || !isAdded) {
+            isProcessingFrame = false
+            return
+        }
+
         val currentStep = enrollmentSteps[currentStepIndex]
 
         if (!currentStep.validator(face)) {
@@ -309,8 +305,7 @@ class FaceEnrollmentFragment : Fragment() {
 
         val sourceBitmap = ImageProxyUtils.imageProxyToBitmap(imageProxy)
         if (sourceBitmap == null) {
-            binding.statusTextView.text =
-                getString(R.string.biometric_face_frame_processing_error)
+            binding.statusTextView.text = getString(R.string.biometric_face_frame_processing_error)
             isProcessingFrame = false
             return
         }
@@ -382,9 +377,43 @@ class FaceEnrollmentFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun showCameraPermissionSettingsDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_camera_permission, null)
+        val cancelButton = dialogView.findViewById<TextView>(R.id.cancelButton)
+        val confirmButton = dialogView.findViewById<TextView>(R.id.confirmButton)
+
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogStyle)
+            .setView(dialogView)
+            .create()
+            .apply {
+                show()
+
+                cancelButton.setOnClickListener {
+                    dismiss()
+                    requireActivity().finish()
+                }
+                confirmButton.setOnClickListener {
+                    dismiss()
+                    openAppSettings()
+                }
+            }
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", requireContext().packageName, null)
+        )
+
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     override fun onDestroyView() {
-        super.onDestroyView()
+        cameraProvider?.unbindAll()
+        cameraProvider = null
         _binding = null
+        super.onDestroyView()
     }
 
     private data class EnrollmentStep(

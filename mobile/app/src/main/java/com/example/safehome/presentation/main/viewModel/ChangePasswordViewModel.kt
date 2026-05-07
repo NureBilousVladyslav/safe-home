@@ -22,7 +22,7 @@ class ChangePasswordViewModel @Inject constructor(
         return try {
             val token = tokenRepository.getToken()
             if (token == null) {
-                Timber.tag("ChangePswdViewModel").e("No token available")
+                Timber.tag("ChangePasswordViewModel").e("No token available")
                 return MessageResponse("No token available")
             }
 
@@ -36,14 +36,14 @@ class ChangePasswordViewModel @Inject constructor(
                 val errorMessage = try {
                     Gson().fromJson(errorBody, ErrorResponse::class.java).error
                 } catch (e: JsonSyntaxException) {
-                    Timber.tag("ChangePswdViewModel").e("Failed to parse error body: ${e.message}")
+                    Timber.tag("ChangePasswordViewModel").e("Failed to parse error body: ${e.message}")
                     "Unknown error: ${e.message}"
                 }
-                Timber.tag("ChangePswdViewModel").e("Error ${response.code()}: $errorMessage")
+                Timber.tag("ChangePasswordViewModel").e("Error ${response.code()}: $errorMessage")
                 MessageResponse(errorMessage)
             }
         } catch (e: Exception) {
-            Timber.tag("ChangePswdViewModel").e("Network error: ${e.message}")
+            Timber.tag("ChangePasswordViewModel").e("Network error: ${e.message}")
             MessageResponse("Network error: ${e.message}")
         }
     }

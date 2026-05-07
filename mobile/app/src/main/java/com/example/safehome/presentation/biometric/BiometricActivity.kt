@@ -3,6 +3,7 @@ package com.example.safehome.presentation.biometric
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.safehome.R
+import com.example.safehome.presentation.biometric.fragments.FaceEnrollmentFragment
 import com.example.safehome.presentation.biometric.fragments.FaceRecognitionFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,8 +29,8 @@ class BiometricActivity : AppCompatActivity() {
         val mode = intent.getStringExtra(EXTRA_MODE) ?: MODE_RECOGNITION
 
         val fragment = when (mode) {
+            MODE_ENROLLMENT -> FaceEnrollmentFragment.newInstance()
             MODE_RECOGNITION -> FaceRecognitionFragment.newInstance()
-            MODE_ENROLLMENT -> FaceRecognitionFragment.newInstance()
             else -> FaceRecognitionFragment.newInstance()
         }
 

@@ -2,12 +2,16 @@ package com.example.safehome.presentation.biometric.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -26,6 +30,7 @@ import com.example.safehome.presentation.biometric.utils.FaceEmbeddingUtils
 import com.example.safehome.presentation.biometric.utils.ImageProxyUtils
 import com.example.safehome.presentation.biometric.viewModel.BiometricState
 import com.example.safehome.presentation.biometric.viewModel.BiometricViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.face.FaceDetector
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -49,6 +54,9 @@ class FaceRecognitionFragment : Fragment() {
     @Inject
     lateinit var faceEmbeddingUtils: FaceEmbeddingUtils
 
+    // CameraX
+    private var cameraProvider: ProcessCameraProvider? = null
+
     private var isProcessingFrame = false
     private var isRecognitionCompleted = false
 
@@ -57,8 +65,7 @@ class FaceRecognitionFragment : Fragment() {
             if (granted) {
                 startCamera()
             } else {
-                showMessage(getString(R.string.biometric_camera_access_required))
-                requireActivity().finish()
+                showCameraPermissionSettingsDialog()
             }
         }
 
@@ -87,7 +94,6 @@ class FaceRecognitionFragment : Fragment() {
         observeViewModel()
         checkCameraPermission()
     }
-
 
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -122,53 +128,83 @@ class FaceRecognitionFragment : Fragment() {
     }
 
     private fun checkCameraPermission() {
-        val permissionGranted = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (permissionGranted) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startCamera()
         } else {
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
+    private fun showCameraPermissionSettingsDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_camera_permission, null)
+        val cancelButton = dialogView.findViewById<TextView>(R.id.cancelButton)
+        val confirmButton = dialogView.findViewById<TextView>(R.id.confirmButton)
+
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogStyle)
+            .setView(dialogView)
+            .create()
+            .apply {
+                show()
+
+                cancelButton.setOnClickListener {
+                    dismiss()
+                    requireActivity().finish()
+                }
+                confirmButton.setOnClickListener {
+                    dismiss()
+                    openAppSettings()
+                }
+            }
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", requireContext().packageName, null)
+        )
+
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            val preview = Preview.Builder()
-                .build()
-                .also { previewUseCase ->
-                    previewUseCase.surfaceProvider = binding.previewView.surfaceProvider
-                }
-
-            val resolutionSelector = ResolutionSelector.Builder()
-                .setResolutionStrategy(
-                    ResolutionStrategy(
-                        Size(720, 1280),
-                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
-                    )
-                )
-                .build()
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setResolutionSelector(resolutionSelector)
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also { analysisUseCase ->
-                    analysisUseCase.setAnalyzer(cameraExecutor) { imageProxy ->
-                        analyzeImage(imageProxy)
-                    }
-                }
-
-
             try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                cameraProvider = cameraProviderFuture.get()
+
+                val preview = Preview.Builder()
+                    .build()
+                    .also { previewUseCase ->
+                        previewUseCase.surfaceProvider = binding.previewView.surfaceProvider
+                    }
+
+                val resolutionSelector = ResolutionSelector.Builder()
+                    .setResolutionStrategy(
+                        ResolutionStrategy(
+                            Size(720, 1280),
+                            ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                        )
+                    )
+                    .build()
+
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setResolutionSelector(resolutionSelector)
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .also { analysisUseCase ->
+                        analysisUseCase.setAnalyzer(cameraExecutor) { imageProxy ->
+                            analyzeImage(imageProxy)
+                        }
+                    }
+
+                cameraProvider?.unbindAll()
+                cameraProvider?.bindToLifecycle(
                     viewLifecycleOwner,
                     CameraSelector.DEFAULT_FRONT_CAMERA,
                     preview,
@@ -182,7 +218,7 @@ class FaceRecognitionFragment : Fragment() {
     }
 
     private fun analyzeImage(imageProxy: ImageProxy) {
-        if (isProcessingFrame || isRecognitionCompleted) {
+        if (_binding == null || !isAdded || isProcessingFrame || isRecognitionCompleted) {
             imageProxy.close()
             return
         }
@@ -197,6 +233,11 @@ class FaceRecognitionFragment : Fragment() {
 
         faceDetector.process(inputImage)
             .addOnSuccessListener { faces ->
+                if (_binding == null || !isAdded) {
+                    isProcessingFrame = false
+                    return@addOnSuccessListener
+                }
+
                 when {
                     faces.isEmpty() -> {
                         binding.statusTextView.text = getString(R.string.biometric_face_not_found)
@@ -250,7 +291,9 @@ class FaceRecognitionFragment : Fragment() {
                 }
             }
             .addOnFailureListener {
-                binding.statusTextView.text = getString(R.string.biometric_face_frame_analysis_error)
+                if (_binding != null && isAdded) {
+                    binding.statusTextView.text = getString(R.string.biometric_face_frame_analysis_error)
+                }
                 isProcessingFrame = false
             }
             .addOnCompleteListener {
@@ -263,7 +306,9 @@ class FaceRecognitionFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        cameraProvider?.unbindAll()
+        cameraProvider = null
         _binding = null
+        super.onDestroyView()
     }
 }

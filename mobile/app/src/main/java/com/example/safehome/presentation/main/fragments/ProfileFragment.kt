@@ -72,8 +72,8 @@ class ProfileFragment : Fragment() {
                             }
                         }
 
-                        changePswdConstraintLayout.setOnClickListener {
-                            findNavController().navigate(R.id.action_navigation_profile_to_changePasswordFragment)
+                        settingsConstraintLayout.setOnClickListener {
+                            findNavController().navigate(R.id.action_navigation_profile_to_settingsFragment)
                         }
 
                         logoutConstraintLayout.setOnClickListener {

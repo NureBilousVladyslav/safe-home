@@ -63,14 +63,14 @@
             style="@style/CardViewField" >
 
             <LinearLayout
-                android:id="@+id/pswdLinearLayout"
+                android:id="@+id/passwordLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/pswdEditText"
+                    android:id="@+id/passwordEditText"
                     style="@style/EditText"
                     android:autofillHints="password"
                     android:hint="@string/password_hint"
@@ -92,7 +92,7 @@
 
         <TextView
             style="@style/TextView"
-            android:id="@+id/resetPswdButton"
+            android:id="@+id/resetPasswordButton"
             android:text="@string/forgot_password"
             android:textColor="@color/primary"
             android:layout_gravity="end"

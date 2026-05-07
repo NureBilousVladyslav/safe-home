@@ -42,7 +42,7 @@ class ResetPasswordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentResetPasswordBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -78,7 +78,7 @@ class ResetPasswordFragment : Fragment() {
         }
 
         binding.apply {
-            resetPswdButton.setOnClickListener {
+            resetPasswordButton.setOnClickListener {
                 val email = emailEditText.text.toString().trim()
 
                 resetViewModel.resetPassword(email)

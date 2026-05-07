@@ -5,16 +5,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data android:scheme="https" />
-        </intent>
-    </queries>
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
 
     <application
         android:name=".SafeHomeApplication"
@@ -27,11 +26,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeHome"
-        tools:targetApi="31">
+        tools:targetApi="34">
+
+        <!-- Biometric Activity -->
         <activity
             android:name=".presentation.biometric.BiometricActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SafeHome" />
 
+        <!-- Firebase Messaging Service -->
         <service
             android:name=".FirebaseMessagingService"
             android:exported="false">
@@ -40,30 +44,35 @@
             </intent-filter>
         </service>
 
+        <!-- Launch Activity -->
         <activity
             android:name=".presentation.launch.LaunchActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/title_activity_launch"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.App.SplashScreen">
+            android:theme="@style/Theme.App.SplashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Auth Activity -->
         <activity
             android:name=".presentation.auth.AuthActivity"
             android:exported="true"
             android:label="@string/title_activity_auth"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SafeHome" />
+
+        <!-- Main Activity -->
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SafeHome" />
+
     </application>
 
 </manifest>

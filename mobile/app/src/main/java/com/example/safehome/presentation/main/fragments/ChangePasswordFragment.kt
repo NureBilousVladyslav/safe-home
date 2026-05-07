@@ -42,61 +42,61 @@ class ChangePasswordFragment : Fragment() {
 
     private fun initUI() {
         with(binding){
-            binding.backButton.setOnClickListener {
+            backButton.setOnClickListener {
                 findNavController().popBackStack()
             }
 
-            binding.eyeCurrentButton.setOnClickListener {
+            eyeCurrentButton.setOnClickListener {
                 isCurrentPasswordVisible = !isCurrentPasswordVisible
                 PasswordVisibilityUtils.togglePasswordVisibility(
-                    binding.pswdCurrentEditText,
-                    binding.eyeCurrentButton,
+                    passwordCurrentEditText,
+                    eyeCurrentButton,
                     isCurrentPasswordVisible
                 )
             }
 
-            binding.eyeNewButton.setOnClickListener {
+            eyeNewButton.setOnClickListener {
                 isNewPasswordVisible = !isNewPasswordVisible
                 PasswordVisibilityUtils.togglePasswordVisibility(
-                    binding.pswdNewEditText,
-                    binding.eyeNewButton,
+                    passwordNewEditText,
+                    eyeNewButton,
                     isNewPasswordVisible
                 )
             }
 
-            binding.eyeConfirmButton.setOnClickListener {
+            eyeConfirmButton.setOnClickListener {
                 isConfirmPasswordVisible = !isConfirmPasswordVisible
                 PasswordVisibilityUtils.togglePasswordVisibility(
-                    binding.pswdConfirmEditText,
-                    binding.eyeConfirmButton,
+                    passwordConfirmEditText,
+                    eyeConfirmButton,
                     isConfirmPasswordVisible
                 )
             }
 
-            changePswdButton.setOnClickListener {
+            changePasswordButton.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val currentPswd = pswdCurrentEditText.text.toString().trim()
-                    val newPswd = pswdNewEditText.text.toString().trim()
-                    val confirmPswd = pswdConfirmEditText.text.toString().trim()
+                    val currentPassword = passwordCurrentEditText.text.toString().trim()
+                    val newPassword = passwordNewEditText.text.toString().trim()
+                    val confirmPassword = passwordConfirmEditText.text.toString().trim()
 
                     val message: String = when {
-                        !ValidatorUtils.isNotBlank(currentPswd, newPswd, confirmPswd) -> {
+                        !ValidatorUtils.isNotBlank(currentPassword, newPassword, confirmPassword) -> {
                             "Field is empty"
                         }
-                        !ValidatorUtils.isValidPassword(currentPswd) -> {
+                        !ValidatorUtils.isValidPassword(currentPassword) -> {
                             "Current password must be 8 characters or more"
                         }
-                        !ValidatorUtils.isValidPassword(newPswd) -> {
+                        !ValidatorUtils.isValidPassword(newPassword) -> {
                             "New password must be 8 characters or more"
                         }
-                        !ValidatorUtils.isValidPassword(confirmPswd) -> {
+                        !ValidatorUtils.isValidPassword(confirmPassword) -> {
                             "Confirm password must be 8 characters or more"
                         }
-                        !ValidatorUtils.isPasswordConfirmed(newPswd, confirmPswd) -> {
+                        !ValidatorUtils.isPasswordConfirmed(newPassword, confirmPassword) -> {
                             "Passwords do not match"
                         }
                         else -> {
-                            val messageResponse = changePasswordViewModel.updatePassword(currentPswd, newPswd)
+                            val messageResponse = changePasswordViewModel.updatePassword(currentPassword, newPassword)
                             if (messageResponse != null) {
                                 Toast.makeText(context, messageResponse.message, Toast.LENGTH_LONG).show()
                                 if (messageResponse.message.contains("successfully")) {
