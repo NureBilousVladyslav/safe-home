@@ -24,8 +24,6 @@ import com.example.safehome.R
 import com.example.safehome.data.local.PrefKeys
 import com.example.safehome.databinding.FragmentSettingsBinding
 import com.example.safehome.presentation.biometric.BiometricActivity
-import com.example.safehome.presentation.biometric.viewModel.BiometricState
-import com.example.safehome.presentation.biometric.viewModel.BiometricViewModel
 import com.example.safehome.presentation.main.viewModel.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +34,6 @@ class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private val settingsViewModel: SettingsViewModel by viewModels()
-    private val biometricViewModel: BiometricViewModel by viewModels()
 
     private var isUpdatingFaceIdSwitchProgrammatically = false
     private var isUpdatingNotificationSwitchProgrammatically = false
@@ -48,19 +45,15 @@ class SettingsFragment : Fragment() {
     private val requestNotificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(requireContext(), "Notifications are enabled", Toast.LENGTH_SHORT).show()
+                prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, true) }
+                showMessage("Notifications are enabled")
             } else {
                 isUpdatingNotificationSwitchProgrammatically = true
                 binding.switchNotify.isChecked = false
                 isUpdatingNotificationSwitchProgrammatically = false
 
                 prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, false) }
-
-                Toast.makeText(
-                    requireContext(),
-                    "Permission denied. Notifications turned off.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showMessage("Permission denied. Notifications turned off.")
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                     !shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
@@ -74,16 +67,12 @@ class SettingsFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val isEnrollmentSuccessful = result.resultCode == Activity.RESULT_OK
 
-            prefs.edit { putBoolean(PrefKeys.KEY_FACE_ID, isEnrollmentSuccessful) }
-
-            isUpdatingFaceIdSwitchProgrammatically = true
-            binding.switchFaceId.isChecked = isEnrollmentSuccessful
-            isUpdatingFaceIdSwitchProgrammatically = false
-
             if (isEnrollmentSuccessful) {
-                Toast.makeText(requireContext(), "Face ID has been enabled", Toast.LENGTH_SHORT).show()
+                settingsViewModel.loadBiometricState()
+                showMessage("Face ID has been enabled")
             } else {
-                Toast.makeText(requireContext(), "Face ID setup was cancelled or failed", Toast.LENGTH_SHORT).show()
+                updateFaceIdSwitch(false)
+                showMessage("Face ID setup was cancelled or failed")
             }
         }
 
@@ -98,21 +87,15 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeBiometricState()
+
+        observeSettingsState()
         initButton()
+        settingsViewModel.loadBiometricState()
     }
 
-    private fun observeBiometricState() {
-        biometricViewModel.state.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                BiometricState.BiometricDisabled -> {
-                    Toast.makeText(requireContext(), "Face ID has been disabled", Toast.LENGTH_SHORT).show()
-                }
-                is BiometricState.Error -> {
-                    Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
-                }
-                else -> Unit
-            }
+    private fun observeSettingsState() {
+        settingsViewModel.isBiometricEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            updateFaceIdSwitch(isEnabled)
         }
     }
 
@@ -128,33 +111,43 @@ class SettingsFragment : Fragment() {
 
             switchNotify.isChecked = prefs.getBoolean(PrefKeys.KEY_NOTIFICATIONS, true)
             switchNotify.setOnCheckedChangeListener { _, isChecked ->
-                if (isUpdatingNotificationSwitchProgrammatically) return@setOnCheckedChangeListener
+                if (isUpdatingNotificationSwitchProgrammatically) {
+                    return@setOnCheckedChangeListener
+                }
 
                 if (isChecked) {
                     requestNotificationPermission()
                 } else {
                     prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, false) }
-                    Toast.makeText(requireContext(), "Notifications are turned off", Toast.LENGTH_SHORT).show()
+                    showMessage("Notifications are turned off")
                 }
             }
 
-            switchFaceId.isChecked = prefs.getBoolean(PrefKeys.KEY_FACE_ID, false)
             switchFaceId.setOnCheckedChangeListener { _, isChecked ->
-                if (isUpdatingFaceIdSwitchProgrammatically) return@setOnCheckedChangeListener
+                if (isUpdatingFaceIdSwitchProgrammatically) {
+                    return@setOnCheckedChangeListener
+                }
 
                 if (isChecked) {
                     startFaceEnrollment()
                 } else {
-                    prefs.edit { putBoolean(PrefKeys.KEY_FACE_ID, false) }
-                    biometricViewModel.clearBiometricData()
+                    settingsViewModel.clearBiometricData()
+                    showMessage("Face ID has been disabled")
                 }
             }
         }
     }
 
+    private fun updateFaceIdSwitch(isEnabled: Boolean) {
+        isUpdatingFaceIdSwitchProgrammatically = true
+        binding.switchFaceId.isChecked = isEnabled
+        isUpdatingFaceIdSwitchProgrammatically = false
+    }
+
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, true) }
+            showMessage("Notifications are enabled")
             return
         }
 
@@ -164,7 +157,9 @@ class SettingsFragment : Fragment() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED -> {
                 prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, true) }
+                showMessage("Notifications are enabled")
             }
+
             else -> {
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
@@ -185,6 +180,7 @@ class SettingsFragment : Fragment() {
                 cancelButton.setOnClickListener {
                     dismiss()
                 }
+
                 confirmButton.setOnClickListener {
                     dismiss()
                     redirectToAppSettings()
@@ -196,6 +192,7 @@ class SettingsFragment : Fragment() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.fromParts("package", requireContext().packageName, null)
         }
+
         startActivity(intent)
     }
 
@@ -203,6 +200,11 @@ class SettingsFragment : Fragment() {
         val intent = Intent(requireContext(), BiometricActivity::class.java).apply {
             putExtra(BiometricActivity.EXTRA_MODE, BiometricActivity.MODE_ENROLLMENT)
         }
+
         faceEnrollmentLauncher.launch(intent)
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
