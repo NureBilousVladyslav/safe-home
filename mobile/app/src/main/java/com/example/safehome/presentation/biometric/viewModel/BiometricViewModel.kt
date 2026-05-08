@@ -54,28 +54,4 @@ class BiometricViewModel @Inject constructor(
             }
         }
     }
-
-    fun clearBiometricData() {
-        viewModelScope.launch {
-            try {
-                biometricRepository.clearBiometricData()
-                _state.value = BiometricState.BiometricDisabled
-            } catch (exception: Exception) {
-                Timber.e(exception, "Failed to disable biometric authentication")
-                _state.value = BiometricState.Error(
-                    exception.localizedMessage ?: "Failed to disable biometric authentication"
-                )
-            }
-        }
-    }
-}
-
-sealed class BiometricState {
-    data object Idle : BiometricState()
-    data object SearchingFace : BiometricState()
-    data object Processing : BiometricState()
-    data object EnrollmentSuccess : BiometricState()
-    data object VerificationSuccess : BiometricState()
-    data object BiometricDisabled : BiometricState()
-    data class Error(val message: String) : BiometricState()
 }
