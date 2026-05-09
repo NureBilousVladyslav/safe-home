@@ -11,7 +11,6 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -30,7 +29,7 @@ import com.example.safehome.presentation.biometric.utils.FaceEmbeddingUtils
 import com.example.safehome.presentation.biometric.utils.ImageProxyUtils
 import com.example.safehome.presentation.biometric.viewModel.BiometricState
 import com.example.safehome.presentation.biometric.viewModel.BiometricViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.safehome.presentation.common.utils.showConfirmationDialog
 import com.google.mlkit.vision.face.FaceDetector
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -140,25 +139,16 @@ class FaceRecognitionFragment : Fragment() {
     }
 
     private fun showCameraPermissionSettingsDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_camera_permission, null)
-        val cancelButton = dialogView.findViewById<TextView>(R.id.cancelButton)
-        val confirmButton = dialogView.findViewById<TextView>(R.id.confirmButton)
-
-        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogStyle)
-            .setView(dialogView)
-            .create()
-            .apply {
-                show()
-
-                cancelButton.setOnClickListener {
-                    dismiss()
-                    requireActivity().finish()
-                }
-                confirmButton.setOnClickListener {
-                    dismiss()
-                    openAppSettings()
-                }
+        showConfirmationDialog(
+            titleResId = R.string.biometric_camera_permission_title,
+            messageResId = R.string.biometric_camera_permission_message,
+            onCancel = {
+                requireActivity().finish()
+            },
+            onConfirm = {
+                openAppSettings()
             }
+        )
     }
 
     private fun openAppSettings() {

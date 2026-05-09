@@ -136,6 +136,11 @@
     <string name="dialog_logout_title">Do you really want to leave?</string>
     <string name="dialog_logout_body">Are you sure you want to leave? You might miss important notifications</string>
 
+    <!-- DialogFirstBiometric -->
+    <string name="biometric_face_id_suggestion_title">Set up Face ID?</string>
+    <string name="biometric_face_id_suggestion_message">Turn on face recognition to more securely confirm important actions in the system</string>
+    <string name="biometric_go_to_settings">Settings</string>
+
 
     <!-- ItemSensor -->
     <string name="status">Status</string>

@@ -33,4 +33,12 @@ class BiometricRepository @Inject constructor(
     fun clearBiometricData() {
         faceTemplateStorage.clearFaceTemplate()
     }
+
+    fun wasFaceIdPromptShown(): Boolean {
+        return faceTemplateStorage.wasFaceIdPromptShown()
+    }
+
+    fun markFaceIdPromptShown() {
+        faceTemplateStorage.markFaceIdPromptShown()
+    }
 }
