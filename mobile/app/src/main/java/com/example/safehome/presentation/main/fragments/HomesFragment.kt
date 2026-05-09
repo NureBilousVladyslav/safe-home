@@ -17,6 +17,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.safehome.databinding.FragmentHomesBinding
+import com.example.safehome.presentation.biometric.utils.registerBiometricVerificationLauncher
+import com.example.safehome.presentation.common.utils.showConfirmationDialog
 import com.example.safehome.presentation.main.adapter.HomeAdapter
 import com.example.safehome.presentation.main.viewModel.HomesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,13 @@ class HomesFragment : Fragment() {
     private val homesViewModel: HomesViewModel by activityViewModels()
     private lateinit var binding: FragmentHomesBinding
     private lateinit var homeAdapter: HomeAdapter
+
+    private val runWithBiometricVerification =
+        registerBiometricVerificationLauncher(
+            isSessionValid = {
+                homesViewModel.isBiometricSessionValid()
+            }
+        )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +51,9 @@ class HomesFragment : Fragment() {
         setupRecyclerView()
         observeHomesState()
         observeErrorMessage()
+        observeFaceIdSuggestionPrompt()
 
+        homesViewModel.checkFaceIdSuggestionPrompt()
         with(binding){
             addHomeButton.setOnClickListener {
                 showAddHomeDialog()
@@ -77,6 +88,26 @@ class HomesFragment : Fragment() {
         }
     }
 
+    private fun observeFaceIdSuggestionPrompt() {
+        homesViewModel.shouldShowFaceIdPrompt.observe(viewLifecycleOwner) { shouldShow ->
+            if (!shouldShow) return@observe
+
+            showConfirmationDialog(
+                titleResId = R.string.biometric_face_id_suggestion_title,
+                messageResId = R.string.biometric_face_id_suggestion_message,
+                cancelTextResId = R.string.cancel,
+                confirmTextResId = R.string.biometric_go_to_settings,
+                onCancel = {
+                    homesViewModel.markFaceIdSuggestionPromptShown()
+                },
+                onConfirm = {
+                    homesViewModel.markFaceIdSuggestionPromptShown()
+                    findNavController().navigate(R.id.action_navigation_homes_to_settingsFragment)
+                }
+            )
+        }
+    }
+
     private fun setupRecyclerView() {
         homeAdapter = HomeAdapter(
             onItemClick = { home ->
@@ -89,16 +120,20 @@ class HomesFragment : Fragment() {
                 findNavController().navigate(R.id.action_navigation_homes_to_navigation_sensor, bundle)
             },
             onArchiveClick = { homeId, isArchived ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    if (isArchived)
-                        homesViewModel.unArchiveHome(homeId)
-                    else
-                    homesViewModel.archiveHome(homeId)
+                runWithBiometricVerification {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        if (isArchived)
+                            homesViewModel.unArchiveHome(homeId)
+                        else
+                            homesViewModel.archiveHome(homeId)
+                    }
                 }
             },
             onDeleteClick = { homeId ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    homesViewModel.deleteHome(homeId)
+                runWithBiometricVerification {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        homesViewModel.deleteHome(homeId)
+                    }
                 }
             }
         )

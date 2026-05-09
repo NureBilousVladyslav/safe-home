@@ -8,6 +8,7 @@ import com.example.safehome.data.model.ActiveSensorRequest
 import com.example.safehome.data.model.AddSensorRequest
 import com.example.safehome.data.model.ErrorResponse
 import com.example.safehome.data.model.SensorDto
+import com.example.safehome.data.repo.BiometricRepository
 import com.example.safehome.data.repo.TokenRepository
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SensorViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
+    private val biometricRepository: BiometricRepository,
     private val sensorApi: SensorApi
 ) : ViewModel() {
     private val _sensorsState = MutableStateFlow<List<SensorDto>>(emptyList())
@@ -80,6 +82,10 @@ class SensorViewModel @Inject constructor(
                 Timber.tag("SensorViewModel").e(errorMessage)
             }
         }
+    }
+
+    fun isBiometricSessionValid(): Boolean {
+        return biometricRepository.isBiometricSessionValid()
     }
 
     fun updateSensorsState(updatedSensors: List<SensorDto>) {

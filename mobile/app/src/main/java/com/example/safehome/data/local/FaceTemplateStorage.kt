@@ -7,24 +7,25 @@ import javax.inject.Singleton
 
 @Singleton
 class FaceTemplateStorage @Inject constructor(
-    private val encryptedSharedPreferences: SharedPreferences
+    private val encryptedSharedPreferences: SharedPreferences,
+    private val prefs: SharedPreferences
 ) {
 
     fun saveFaceTemplate(embedding: FloatArray) {
-        val embeddingString = embedding.joinToString(separator = EMBEDDING_SEPARATOR)
+        val embeddingString = embedding.joinToString(separator = PrefKeys.EMBEDDING_SEPARATOR)
 
         encryptedSharedPreferences.edit {
-            putString(KEY_FACE_EMBEDDING, embeddingString)
-            putBoolean(KEY_BIOMETRIC_ENABLED, true)
+            putString(PrefKeys.KEY_FACE_EMBEDDING, embeddingString)
+            putBoolean(PrefKeys.KEY_FACE_ID_ENABLED, true)
         }
     }
 
     fun getFaceTemplate(): FloatArray? {
-        val embeddingString = encryptedSharedPreferences.getString(KEY_FACE_EMBEDDING, null)
+        val embeddingString = encryptedSharedPreferences.getString(PrefKeys.KEY_FACE_EMBEDDING, null)
             ?: return null
 
         val values = embeddingString
-            .split(EMBEDDING_SEPARATOR)
+            .split(PrefKeys.EMBEDDING_SEPARATOR)
             .mapNotNull { value -> value.toFloatOrNull() }
 
         if (values.isEmpty()) return null
@@ -33,19 +34,43 @@ class FaceTemplateStorage @Inject constructor(
     }
 
     fun isBiometricEnabled(): Boolean {
-        return encryptedSharedPreferences.getBoolean(KEY_BIOMETRIC_ENABLED, false)
+        return encryptedSharedPreferences.getBoolean(PrefKeys.KEY_FACE_ID_ENABLED, false)
     }
 
     fun clearFaceTemplate() {
         encryptedSharedPreferences.edit {
-            remove(KEY_FACE_EMBEDDING)
-            putBoolean(KEY_BIOMETRIC_ENABLED, false)
+            remove(PrefKeys.KEY_FACE_EMBEDDING)
+            putBoolean(PrefKeys.KEY_FACE_ID_ENABLED, false)
         }
     }
 
-    companion object {
-        private const val KEY_FACE_EMBEDDING = "key_face_embedding"
-        private const val KEY_BIOMETRIC_ENABLED = "key_biometric_enabled"
-        private const val EMBEDDING_SEPARATOR = ";"
+    fun wasFaceIdPromptShown(): Boolean {
+        return prefs.getBoolean(PrefKeys.KEY_FACE_ID_PROMPT_SHOWN, false)
     }
+
+    fun markFaceIdPromptShown() {
+        prefs.edit {
+            putBoolean(PrefKeys.KEY_FACE_ID_PROMPT_SHOWN, true)
+        }
+    }
+
+    fun saveLastFaceIdVerificationTime(timeMillis: Long) {
+        encryptedSharedPreferences.edit {
+            putLong(PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME, timeMillis)
+        }
+    }
+
+    fun getLastFaceIdVerificationTime(): Long {
+        return encryptedSharedPreferences.getLong(
+            PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME,
+            0L
+        )
+    }
+
+    fun clearLastFaceIdVerificationTime() {
+        encryptedSharedPreferences.edit {
+            remove(PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME)
+        }
+    }
+
 }

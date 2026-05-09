@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -16,12 +15,12 @@ import com.example.safehome.R
 import com.example.safehome.databinding.FragmentProfileBinding
 import com.example.safehome.presentation.auth.AuthActivity
 import com.example.safehome.presentation.main.viewModel.ProfileViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.getValue
 import androidx.core.net.toUri
+import com.example.safehome.presentation.common.utils.showConfirmationDialog
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -86,25 +85,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showLogoutDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_logout, null)
-        val cancelButton = dialogView.findViewById<TextView>(R.id.cancelButton)
-        val exitButton = dialogView.findViewById<TextView>(R.id.exitButton)
-
-        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogStyle)
-            .setView(dialogView)
-            .create()
-            .apply {
-                show()
-                cancelButton.setOnClickListener {
-                    dismiss()
-                }
-                exitButton.setOnClickListener {
-                    profileViewModel.logout()
-
-                    val intent = Intent(requireContext(), AuthActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+        showConfirmationDialog(
+            titleResId = R.string.dialog_logout_title,
+            messageResId = R.string.dialog_logout_body,
+            confirmTextResId = R.string.exit,
+            onCancel = { },
+            onConfirm = {
+                profileViewModel.logout()
+                val intent = Intent(requireContext(), AuthActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             }
+        )
     }
 }

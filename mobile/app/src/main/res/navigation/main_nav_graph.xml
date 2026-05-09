@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_navigation_homes_to_navigation_sensor"
             app:destination="@id/navigation_sensor" />
+        <action
+            android:id="@+id/action_navigation_homes_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment

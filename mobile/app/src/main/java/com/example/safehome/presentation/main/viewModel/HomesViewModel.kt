@@ -1,11 +1,14 @@
 package com.example.safehome.presentation.main.viewModel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.safehome.data.api.HomeApi
 import com.example.safehome.data.model.AddHomeRequest
 import com.example.safehome.data.model.HomeDto
 import com.example.safehome.data.model.ErrorResponse
+import com.example.safehome.data.repo.BiometricRepository
 import com.example.safehome.data.repo.TokenRepository
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -22,12 +25,17 @@ import timber.log.Timber
 @HiltViewModel
 class HomesViewModel @Inject constructor(
     private var tokenRepository: TokenRepository,
-    private val homeApi: HomeApi
+    private val homeApi: HomeApi,
+    private val biometricRepository: BiometricRepository
 ) : ViewModel() {
     private val _homesState = MutableStateFlow<List<HomeDto>>(emptyList())
     val homesState: StateFlow<List<HomeDto>> = _homesState.asStateFlow()
+
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _shouldShowFaceIdPrompt = MutableLiveData<Boolean>()
+    val shouldShowFaceIdPrompt: LiveData<Boolean> = _shouldShowFaceIdPrompt
 
     private var refreshJob: Job? = null
 
@@ -43,6 +51,23 @@ class HomesViewModel @Inject constructor(
                 delay(3000)
             }
         }
+    }
+
+    fun isBiometricSessionValid(): Boolean {
+        return biometricRepository.isBiometricSessionValid()
+    }
+
+    fun checkFaceIdSuggestionPrompt() {
+        val shouldShowPrompt =
+            !biometricRepository.isBiometricEnabled() &&
+                    !biometricRepository.wasFaceIdPromptShown()
+
+        _shouldShowFaceIdPrompt.value = shouldShowPrompt
+    }
+
+    fun markFaceIdSuggestionPromptShown() {
+        biometricRepository.markFaceIdPromptShown()
+        _shouldShowFaceIdPrompt.value = false
     }
 
     fun loadHomes() {

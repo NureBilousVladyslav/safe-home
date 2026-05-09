@@ -12,7 +12,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -24,9 +23,10 @@ import com.example.safehome.R
 import com.example.safehome.data.local.PrefKeys
 import com.example.safehome.databinding.FragmentSettingsBinding
 import com.example.safehome.presentation.biometric.BiometricActivity
+import com.example.safehome.presentation.common.utils.showConfirmationDialog
 import com.example.safehome.presentation.main.viewModel.SettingsViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -46,7 +46,7 @@ class SettingsFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, true) }
-                showMessage("Notifications are enabled")
+                Timber.tag("Notification").e("Notifications are enabled")
             } else {
                 isUpdatingNotificationSwitchProgrammatically = true
                 binding.switchNotify.isChecked = false
@@ -69,10 +69,10 @@ class SettingsFragment : Fragment() {
 
             if (isEnrollmentSuccessful) {
                 settingsViewModel.loadBiometricState()
-                showMessage("Face ID has been enabled")
+                Timber.tag("Face ID").e("Face ID has been enabled")
             } else {
                 updateFaceIdSwitch(false)
-                showMessage("Face ID setup was cancelled or failed")
+                Timber.tag("Face ID").e("Face ID setup was cancelled or failed")
             }
         }
 
@@ -167,25 +167,14 @@ class SettingsFragment : Fragment() {
     }
 
     private fun showNotificationSettingsDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_notification_permission, null)
-        val cancelButton = dialogView.findViewById<TextView>(R.id.cancelButton)
-        val confirmButton = dialogView.findViewById<TextView>(R.id.confirmButton)
-
-        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogStyle)
-            .setView(dialogView)
-            .create()
-            .apply {
-                show()
-
-                cancelButton.setOnClickListener {
-                    dismiss()
-                }
-
-                confirmButton.setOnClickListener {
-                    dismiss()
-                    redirectToAppSettings()
-                }
+        showConfirmationDialog(
+            titleResId = R.string.notification_permission_title,
+            messageResId = R.string.notification_permission_message,
+            onCancel = { },
+            onConfirm = {
+                redirectToAppSettings()
             }
+        )
     }
 
     private fun redirectToAppSettings() {
