@@ -45,6 +45,9 @@ class SensorFragment : Fragment() {
 
     private val runWithBiometricVerification =
         registerBiometricVerificationLauncher(
+            isBiometricEnabled = {
+                sensorViewModel.isBiometricEnabled()
+            },
             isSessionValid = {
                 sensorViewModel.isBiometricSessionValid()
             }

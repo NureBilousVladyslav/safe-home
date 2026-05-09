@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.safehome.presentation.biometric.BiometricActivity
 
 fun Fragment.registerBiometricVerificationLauncher(
+    isBiometricEnabled: () -> Boolean,
     isSessionValid: () -> Boolean,
     onVerificationFailed: () -> Unit = {
         Toast.makeText(
@@ -33,7 +34,7 @@ fun Fragment.registerBiometricVerificationLauncher(
     }
 
     return { action ->
-        if (isSessionValid()) {
+        if (!isBiometricEnabled() || isSessionValid()) {
             action()
         } else {
             pendingAction = action
