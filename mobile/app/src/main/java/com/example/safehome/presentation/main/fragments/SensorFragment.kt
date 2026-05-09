@@ -1,7 +1,5 @@
 package com.example.safehome.presentation.main.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
@@ -25,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.safehome.R
 import com.example.safehome.data.model.SensorDto
 import com.example.safehome.databinding.FragmentSensorBinding
-import com.example.safehome.presentation.biometric.BiometricActivity
+import com.example.safehome.presentation.biometric.utils.registerBiometricVerificationLauncher
 import com.example.safehome.presentation.main.adapter.SensorAdapter
 import com.example.safehome.presentation.main.viewModel.HomesViewModel
 import com.example.safehome.presentation.main.viewModel.SensorViewModel
@@ -44,25 +41,14 @@ class SensorFragment : Fragment() {
     private lateinit var binding: FragmentSensorBinding
     private lateinit var sensorAdapter: SensorAdapter
     private lateinit var homeId: String
-
-    private var pendingHomeSwitchState: Boolean? = null
     private var isUpdatingHomeSwitchProgrammatically = false
 
-    private val biometricVerificationLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val pendingState = pendingHomeSwitchState
-            pendingHomeSwitchState = null
-
-            if (result.resultCode == Activity.RESULT_OK && pendingState != null) {
-                applyVerifiedHomeSwitchState(pendingState)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Biometric verification was cancelled or failed",
-                    Toast.LENGTH_SHORT
-                ).show()
+    private val runWithBiometricVerification =
+        registerBiometricVerificationLauncher(
+            isSessionValid = {
+                sensorViewModel.isBiometricSessionValid()
             }
-        }
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,12 +195,6 @@ class SensorFragment : Fragment() {
 
             isUpdatingHomeSwitchProgrammatically = false
 
-            homeArmedSwitch.setOnSwitchEnabledListener { isChecked ->
-                if (isChecked) {
-                    requestBiometricVerificationForHomeSwitch(true)
-                }
-            }
-
             homeArmedSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdatingHomeSwitchProgrammatically) return@setOnCheckedChangeListener
                 if (!homeArmedSwitch.isEnabled) return@setOnCheckedChangeListener
@@ -223,19 +203,11 @@ class SensorFragment : Fragment() {
                 homeArmedSwitch.isChecked = !isChecked
                 isUpdatingHomeSwitchProgrammatically = false
 
-                requestBiometricVerificationForHomeSwitch(isChecked)
+                runWithBiometricVerification {
+                    applyVerifiedHomeSwitchState(isChecked)
+                }
             }
         }
-    }
-
-    private fun requestBiometricVerificationForHomeSwitch(targetState: Boolean) {
-        pendingHomeSwitchState = targetState
-
-        val intent = Intent(requireContext(), BiometricActivity::class.java).apply {
-            putExtra(BiometricActivity.EXTRA_MODE, BiometricActivity.MODE_RECOGNITION)
-        }
-
-        biometricVerificationLauncher.launch(intent)
     }
 
     private fun applyVerifiedHomeSwitchState(isArmed: Boolean) {
@@ -326,45 +298,51 @@ class SensorFragment : Fragment() {
     private fun setupRecyclerView() {
         sensorAdapter = SensorAdapter(
             onArchiveClick = { sensorId, isArchived ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    if (isArchived) {
-                        sensorViewModel.unArchiveSensor(sensorId)
-                    } else {
-                        sensorViewModel.archiveSensor(sensorId)
+                runWithBiometricVerification {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        if (isArchived) {
+                            sensorViewModel.unArchiveSensor(sensorId)
+                        } else {
+                            sensorViewModel.archiveSensor(sensorId)
+                        }
                     }
                 }
             },
             onDeleteClick = { sensorId ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    sensorViewModel.deleteSensor(sensorId)
+                runWithBiometricVerification {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        sensorViewModel.deleteSensor(sensorId)
+                    }
                 }
             },
             onActiveChange = { sensorId, isActive, callback ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val success = sensorViewModel.setActiveSensor(sensorId, isActive)
-                    callback(success)
+                runWithBiometricVerification {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val success = sensorViewModel.setActiveSensor(sensorId, isActive)
+                        callback(success)
 
-                    if (!success) {
-                        val currentHomeStatus = homesViewModel.homesState.value
-                            .find { it.home_id == homeId }
-                            ?.default_mode_name ?: "disarmed"
+                        if (!success) {
+                            val currentHomeStatus = homesViewModel.homesState.value
+                                .find { it.home_id == homeId }
+                                ?.default_mode_name ?: "disarmed"
 
-                        val revertToActive = currentHomeStatus == "armed"
-                        val updatedSensors = sensorViewModel.sensorsState.value.map {
-                            if (it.sensor_id == sensorId) {
-                                it.copy(is_active = revertToActive)
-                            } else {
-                                it
+                            val revertToActive = currentHomeStatus == "armed"
+                            val updatedSensors = sensorViewModel.sensorsState.value.map {
+                                if (it.sensor_id == sensorId) {
+                                    it.copy(is_active = revertToActive)
+                                } else {
+                                    it
+                                }
                             }
-                        }
 
-                        sensorViewModel.updateSensorsState(updatedSensors)
-                        sensorAdapter.submitList(updatedSensors)
-                        Toast.makeText(
-                            context,
-                            "Failed to update sensor status",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            sensorViewModel.updateSensorsState(updatedSensors)
+                            sensorAdapter.submitList(updatedSensors)
+                            Toast.makeText(
+                                context,
+                                "Failed to update sensor status",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }

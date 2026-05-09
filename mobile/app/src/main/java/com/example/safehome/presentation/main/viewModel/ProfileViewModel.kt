@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.safehome.data.api.UserApi
 import com.example.safehome.data.model.ErrorResponse
 import com.example.safehome.data.model.GetUserResponse
+import com.example.safehome.data.repo.BiometricRepository
 import com.example.safehome.data.repo.TokenRepository
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private var tokenRepository: TokenRepository,
+    private val biometricRepository: BiometricRepository,
     private val userApi: UserApi,
 ) : ViewModel() {
     private val _userState = MutableStateFlow<GetUserResponse?>(null)
@@ -54,5 +56,6 @@ class ProfileViewModel @Inject constructor(
 
     fun logout(){
         tokenRepository.clearToken()
+        biometricRepository.clearBiometricSession()
     }
 }

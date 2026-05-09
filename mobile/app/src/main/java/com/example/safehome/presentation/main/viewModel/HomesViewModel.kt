@@ -53,6 +53,10 @@ class HomesViewModel @Inject constructor(
         }
     }
 
+    fun isBiometricSessionValid(): Boolean {
+        return biometricRepository.isBiometricSessionValid()
+    }
+
     fun checkFaceIdSuggestionPrompt() {
         val shouldShowPrompt =
             !biometricRepository.isBiometricEnabled() &&

@@ -53,4 +53,24 @@ class FaceTemplateStorage @Inject constructor(
             putBoolean(PrefKeys.KEY_FACE_ID_PROMPT_SHOWN, true)
         }
     }
+
+    fun saveLastFaceIdVerificationTime(timeMillis: Long) {
+        encryptedSharedPreferences.edit {
+            putLong(PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME, timeMillis)
+        }
+    }
+
+    fun getLastFaceIdVerificationTime(): Long {
+        return encryptedSharedPreferences.getLong(
+            PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME,
+            0L
+        )
+    }
+
+    fun clearLastFaceIdVerificationTime() {
+        encryptedSharedPreferences.edit {
+            remove(PrefKeys.KEY_LAST_FACE_ID_VERIFICATION_TIME)
+        }
+    }
+
 }

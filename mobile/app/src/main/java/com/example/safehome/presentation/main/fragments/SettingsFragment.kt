@@ -26,6 +26,7 @@ import com.example.safehome.presentation.biometric.BiometricActivity
 import com.example.safehome.presentation.common.utils.showConfirmationDialog
 import com.example.safehome.presentation.main.viewModel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -45,7 +46,7 @@ class SettingsFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 prefs.edit { putBoolean(PrefKeys.KEY_NOTIFICATIONS, true) }
-                showMessage("Notifications are enabled")
+                Timber.tag("Notification").e("Notifications are enabled")
             } else {
                 isUpdatingNotificationSwitchProgrammatically = true
                 binding.switchNotify.isChecked = false
@@ -68,10 +69,10 @@ class SettingsFragment : Fragment() {
 
             if (isEnrollmentSuccessful) {
                 settingsViewModel.loadBiometricState()
-                showMessage("Face ID has been enabled")
+                Timber.tag("Face ID").e("Face ID has been enabled")
             } else {
                 updateFaceIdSwitch(false)
-                showMessage("Face ID setup was cancelled or failed")
+                Timber.tag("Face ID").e("Face ID setup was cancelled or failed")
             }
         }
 

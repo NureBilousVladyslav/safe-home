@@ -37,11 +37,11 @@ class BiometricViewModel @Inject constructor(
     fun verifyFace(embedding: FloatArray) {
         viewModelScope.launch {
             _state.value = BiometricState.Processing
-
             try {
                 val isVerified = biometricRepository.verifyFace(embedding)
 
                 _state.value = if (isVerified) {
+                    biometricRepository.markBiometricSessionVerified()
                     BiometricState.VerificationSuccess
                 } else {
                     BiometricState.Error("Face was not recognized")

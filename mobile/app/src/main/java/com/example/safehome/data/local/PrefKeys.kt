@@ -7,4 +7,6 @@ object PrefKeys {
     const val KEY_FACE_ID_ENABLED = "face_id_enabled"
     const val KEY_FACE_ID_PROMPT_SHOWN = "face_id_prompt_shown"
     const val EMBEDDING_SEPARATOR = ";"
+    const val KEY_LAST_FACE_ID_VERIFICATION_TIME = "last_face_id_verification_time"
+
 }
