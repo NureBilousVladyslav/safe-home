@@ -53,6 +53,10 @@ class HomesViewModel @Inject constructor(
         }
     }
 
+    fun isBiometricEnabled(): Boolean {
+        return biometricRepository.isBiometricEnabled()
+    }
+
     fun isBiometricSessionValid(): Boolean {
         return biometricRepository.isBiometricSessionValid()
     }

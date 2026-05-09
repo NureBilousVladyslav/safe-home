@@ -2,152 +2,150 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-// WiFi credentials
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
+// Wi-Fi credentials
+const char* ssid = "Vlad";
+const char* wifiPassword = "********";
 
-// Server URL
-const char* serverUrl = "https://safe-home-backend-d2f2atb3d0eee9ay.northeurope-01.azurewebsites.net/iot/send_sensor_status";
+// Flask server URL.
+// Your PC and ESP32-S3 must be connected to the same Wi-Fi network.
+const char* serverUrl = "http://192.168.50.192:5000/iot/send_sensor_status";
 
-// HC-SR04 pins
-const int trig = 2;  // Adjusted to D2 for Wokwi
-const int echo = 4;  // Adjusted to D4 for Wokwi
+// HC-SR04 pins for ESP32-S3
+const int trigPin = 21;
+const int echoPin = 19;
 
 // User credentials and sensor data
-String email = "";
-String userPassword = "";
-String sensorID = "";
+String email = "vladyslav.bilous3@nure.ua";
+String userPassword = "11111111";
+String sensorID = "000003";
+
 bool currentDoorState = false;
 bool previousDoorState = false;
+bool hasPreviousDoorState = false;
 
-// Function to connect to Wi-Fi
 void setup_wifi() {
-  Serial.println("Connecting to WiFi...");
-  WiFi.begin(ssid, password);
+  Serial.println("Connecting to Wi-Fi...");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, wifiPassword);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  unsigned long startAttemptTime = millis();
+
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < 20000) {
     delay(500);
     Serial.print(".");
   }
 
-  Serial.println("\nWiFi connected");
-  Serial.print("IP address: ");
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("\nFailed to connect to Wi-Fi. Restarting...");
+    delay(3000);
+    ESP.restart();
+  }
+
+  Serial.println("\nWi-Fi connected");
+  Serial.print("ESP32-S3 IP address: ");
   Serial.println(WiFi.localIP());
 }
 
-// Function to send data to the server
-void sendData(bool newStatus) {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
+long readDistanceCm() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
 
-    Serial.print("Sending data to: ");
-    Serial.println(serverUrl);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
 
-    http.begin(serverUrl);
-    http.addHeader("Content-Type", "application/json");
+  long duration = pulseIn(echoPin, HIGH, 30000);
 
-    // Create JSON document
-    DynamicJsonDocument doc(1024);
-    doc["email"] = email;
-    doc["password"] = userPassword;
-    doc["sensor_id"] = sensorID;
-    doc["is_closed"] = newStatus ? "true" : "false";
-
-    String requestBody;
-    serializeJson(doc, requestBody);
-
-    Serial.print("Request Body: ");
-    Serial.println(requestBody);
-
-    int httpCode = http.PUT(requestBody);
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpCode);
-
-    if (httpCode == HTTP_CODE_OK) {
-      String response = http.getString();
-      Serial.print("Response: ");
-      Serial.println(response);
-    } else {
-      Serial.print("Error sending PUT: ");
-      Serial.println(httpCode);
-    }
-
-    http.end();
-    Serial.println("--------------------");
+  if (duration == 0) {
+    return -1;
   }
+
+  return (duration * 0.0343) / 2;
+}
+
+void sendData(bool newStatus) {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wi-Fi disconnected. Reconnecting...");
+    setup_wifi();
+  }
+
+  WiFiClient client;
+  HTTPClient http;
+
+  http.setTimeout(10000);
+
+  Serial.print("Sending data to: ");
+  Serial.println(serverUrl);
+
+  if (!http.begin(client, serverUrl)) {
+    Serial.println("HTTP begin failed");
+    return;
+  }
+
+  http.addHeader("Content-Type", "application/json");
+
+  DynamicJsonDocument doc(1024);
+  doc["email"] = email;
+  doc["password"] = userPassword;
+  doc["sensor_id"] = sensorID;
+  doc["is_closed"] = newStatus;
+
+  String requestBody;
+  serializeJson(doc, requestBody);
+
+  Serial.print("Request Body: ");
+  Serial.println(requestBody);
+
+  int httpCode = http.PUT(requestBody);
+
+  Serial.print("HTTP Response code: ");
+  Serial.println(httpCode);
+
+  if (httpCode > 0) {
+    String response = http.getString();
+    Serial.print("Response: ");
+    Serial.println(response);
+  } else {
+    Serial.print("HTTP error: ");
+    Serial.println(http.errorToString(httpCode));
+  }
+
+  http.end();
+  Serial.println("--------------------");
 }
 
 void setup() {
-  // Initialize serial communication
   Serial.begin(115200);
+  delay(1000);
 
-  // Initialize WiFi
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
   setup_wifi();
 
-  // Prompt the user for credentials and sensor ID
-  Serial.println("Enter email:");
-  while (Serial.available() == 0) {
-    delay(100);
-  }
-  email = Serial.readStringUntil('\n');
-  email.trim();  // Remove whitespace
-
-  Serial.println("Enter password:");
-  while (Serial.available() == 0) {
-    delay(100);
-  }
-  userPassword = Serial.readStringUntil('\n');
-  userPassword.trim();  // Remove whitespace
-
-  Serial.println("Enter sensor ID:");
-  Serial.println("Enter password:");
-  while (Serial.available() == 0) {
-    delay(100);
-  }
-  sensorID = Serial.readStringUntil('\n');
-  sensorID.trim();  // Remove whitespace
-
-
-  // Debug print the entered values
-  Serial.print("Email: ");
-  Serial.println(email);
-  Serial.print("Password: ");
-  Serial.println(userPassword);
-  Serial.print("Sensor ID: ");
-  Serial.println(sensorID);
-
-  // Initialize HC-SR04 pins
-  pinMode(trig, OUTPUT);
-  pinMode(echo, INPUT);
+  Serial.println("System started");
 }
 
 void loop() {
-  // Clear the TRIG pin by setting it low
-  digitalWrite(trig, LOW);
-  delayMicroseconds(2);
-  // Send a 10 microsecond pulse to TRIG to start the measurement
-  digitalWrite(trig, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trig, LOW);
+  long distance = readDistanceCm();
 
-  // Measure the time for the echo to return
-  long duration = pulseIn(echo, HIGH);
-
-  // Calculate distance in centimeters
-  long distance = (duration * 0.034) / 2;
-
-  // Determine door state based on the distance
-  if (distance > 40) {
-    currentDoorState = false;  // Door is open
-  } else {
-    currentDoorState = true;  // Door is closed
+  if (distance < 0) {
+    Serial.println("Distance read failed");
+    delay(500);
+    return;
   }
 
-  // Send data if the door state has changed
-  if (currentDoorState != previousDoorState) {
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  currentDoorState = distance <= 40;
+
+  if (!hasPreviousDoorState || currentDoorState != previousDoorState) {
     sendData(currentDoorState);
     previousDoorState = currentDoorState;
+    hasPreviousDoorState = true;
   }
 
-  delay(500);  // Delay for next reading
+  delay(500);
 }

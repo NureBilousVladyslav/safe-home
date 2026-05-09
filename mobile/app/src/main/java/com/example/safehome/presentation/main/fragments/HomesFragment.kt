@@ -32,6 +32,9 @@ class HomesFragment : Fragment() {
 
     private val runWithBiometricVerification =
         registerBiometricVerificationLauncher(
+            isBiometricEnabled = {
+                homesViewModel.isBiometricEnabled()
+            },
             isSessionValid = {
                 homesViewModel.isBiometricSessionValid()
             }

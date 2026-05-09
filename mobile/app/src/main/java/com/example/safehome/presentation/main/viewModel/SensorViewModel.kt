@@ -57,6 +57,14 @@ class SensorViewModel @Inject constructor(
         }
     }
 
+    fun isBiometricEnabled(): Boolean {
+        return biometricRepository.isBiometricEnabled()
+    }
+
+    fun isBiometricSessionValid(): Boolean {
+        return biometricRepository.isBiometricSessionValid()
+    }
+
     fun loadSensors() {
         viewModelScope.launch {
             try {
@@ -82,10 +90,6 @@ class SensorViewModel @Inject constructor(
                 Timber.tag("SensorViewModel").e(errorMessage)
             }
         }
-    }
-
-    fun isBiometricSessionValid(): Boolean {
-        return biometricRepository.isBiometricSessionValid()
     }
 
     fun updateSensorsState(updatedSensors: List<SensorDto>) {
