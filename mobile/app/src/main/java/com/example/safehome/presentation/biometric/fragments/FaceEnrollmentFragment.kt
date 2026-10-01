@@ -60,7 +60,6 @@ class FaceEnrollmentFragment : Fragment() {
     @Inject
     lateinit var faceUtils: FaceUtils
 
-    // CameraX
     private var cameraProvider: ProcessCameraProvider? = null
 
     private val capturedEmbeddings = mutableListOf<FloatArray>()

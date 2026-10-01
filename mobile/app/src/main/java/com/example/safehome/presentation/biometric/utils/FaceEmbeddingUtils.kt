@@ -15,11 +15,9 @@ class FaceEmbeddingUtils @Inject constructor(
     @param:ApplicationContext private val context: Context
 ) {
 
-
     private val interpreter: Interpreter by lazy {
         Interpreter(loadModelFile())
     }
-
 
     fun getFaceEmbedding(faceBitmap: Bitmap): FloatArray {
         val resizedBitmap = ImageProxyUtils.resizeBitmap(
