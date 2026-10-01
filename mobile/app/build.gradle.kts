@@ -10,7 +10,7 @@ plugins {
 
 extensions.configure<ApplicationExtension>("android") {
     namespace = "com.example.safehome"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.safehome"
@@ -120,7 +120,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // Debug

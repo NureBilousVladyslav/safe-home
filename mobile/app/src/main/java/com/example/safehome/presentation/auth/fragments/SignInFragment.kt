@@ -41,7 +41,7 @@ class SignInFragment : Fragment() {
     private var _isPasswordVisible = false
 
     private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        authViewModel.handleGoogleSignInResult(result.data)
+        //authViewModel.handleGoogleSignInResult(result.data)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,8 +99,8 @@ class SignInFragment : Fragment() {
         }
 
         binding.googleButton.setOnClickListener {
-            val signInIntent = authViewModel.getGoogleSignInIntent(requireContext())
-            googleSignInLauncher.launch(signInIntent)
+            //val signInIntent = authViewModel.getGoogleSignInIntent(requireContext())
+            //googleSignInLauncher.launch(signInIntent)
         }
 
         binding.resetPasswordButton.setOnClickListener {

@@ -9,7 +9,7 @@ import com.example.safehome.data.model.ErrorType
 import com.example.safehome.data.model.Result
 import com.example.safehome.domain.AuthUseCase
 import com.example.safehome.presentation.auth.utils.ValidatorUtils
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+//import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -61,6 +61,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
+    /* Переробити через Credential Manager + Google Identity (нові вимоги)
     fun getGoogleSignInIntent(context: Context): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -113,5 +114,5 @@ class SignInViewModel @Inject constructor(
                 _authState.emit(result)
             }
         }
-    }
+    }*/
 }

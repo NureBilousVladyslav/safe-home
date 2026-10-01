@@ -1,51 +1,51 @@
 [versions]
 # Build tools
-agp = "9.2.1"
-google-plugin = "4.4.4"
-kotlin = "2.3.21"
+agp = "9.4.1"
+google-plugin = "4.5.0"
+kotlin = "2.4.20"
 ksp = "2.3.6"
 
 # AndroidX core / UI
 activityCompose = "1.13.0"
 activityKtx = "1.13.0"
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 browser = "1.10.0"
-constraintlayout = "2.2.1"
-coreKtx = "1.18.0"
+constraintlayout = "2.2.2"
+coreKtx = "1.19.1"
 coreSplashscreen = "1.2.0"
-fragmentKtx = "1.8.9"
-material = "1.13.0"
+fragmentKtx = "1.9.1"
+material = "1.14.0"
 
 # Compose
-composeBom = "2026.05.00"
+composeBom = "2026.09.00"
 
 # Lifecycle / Navigation / Background
-androidx-worker = "2.11.2"
-lifecycleLivedataKtx = "2.10.0"
-lifecycleRuntimeKtx = "2.10.0"
-lifecycleViewmodelKtx = "2.10.0"
-navigationFragmentKtx = "2.9.8"
-navigationUiKtx = "2.9.8"
+androidx-worker = "2.12.0"
+lifecycleLivedataKtx = "2.11.0"
+lifecycleRuntimeKtx = "2.11.0"
+lifecycleViewmodelKtx = "2.11.0"
+navigationFragmentKtx = "2.10.2"
+navigationUiKtx = "2.10.2"
 
 # Data / Network / Security
 converterGson = "3.0.0"
 datastore = "1.2.1"
-loggingInterceptor = "5.3.2"
+loggingInterceptor = "5.5.0"
 retrofitVersion = "3.0.0"
-roomKtx = "2.8.4"
+roomKtx = "2.8.5"
 securityCrypto = "1.1.0"
 timberVersion = "5.0.1"
 
 # Dependency injection
-hilt-version = "2.59.2"
+hilt-version = "2.60.1"
 
 # Firebase / Google services
-google-firebase-bom = "34.12.0"
-playServicesAuth = "21.5.1"
+google-firebase-bom = "34.19.0"
+playServicesAuth = "22.0.0"
 
 # Camera / ML
-cameraLifecycle = "1.6.1"
-litert = "2.1.4"
+cameraLifecycle = "1.6.2"
+litert = "2.2.0"
 playServicesMlkitFaceDetection = "17.1.0"
 visionCommon = "17.3.0"
 
