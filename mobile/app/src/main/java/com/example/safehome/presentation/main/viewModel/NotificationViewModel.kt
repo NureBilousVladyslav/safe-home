@@ -57,7 +57,13 @@ class NotificationViewModel @Inject constructor(
     }
 
     private suspend fun loadGeneralNotifications() {
-        try {
+        val item = NotificationItem("1","General","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966","02/10/26")
+        val list = mutableListOf<NotificationItem>()
+        repeat(10){
+            list.add(item.copy())
+        }
+        _notificationsGeneralState.value = list
+        /*try {
             val token = tokenRepository.getToken()
             val response = userApi.getGeneralNotifications(token)
             if (response.isSuccessful) {
@@ -69,11 +75,18 @@ class NotificationViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.tag("NotificationViewModel").e("Network error: ${e.message}")
             _notificationsGeneralState.value = emptyList()
-        }
+        }*/
     }
 
     private suspend fun loadSecurityNotifications() {
-        try {
+        val item = NotificationItem("1","Security","Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966","02/10/26")
+        val list = mutableListOf<NotificationItem>()
+        repeat(10){
+            list.add(item.copy())
+        }
+        _notificationsSecurityState.value = list
+
+        /*try {
             val token = tokenRepository.getToken()
             val response = userApi.getSecurityNotifications(token)
             if (response.isSuccessful) {
@@ -85,7 +98,7 @@ class NotificationViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.tag("NotificationViewModel").e("Network error: ${e.message}")
             _notificationsSecurityState.value = emptyList()
-        }
+        }*/
     }
 
     private fun handleError(errorBody: String?, state: MutableStateFlow<List<NotificationItem>>) {

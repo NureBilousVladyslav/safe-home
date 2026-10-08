@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import timber.log.Timber
+import java.util.UUID
 
 @HiltViewModel
 class HomesViewModel @Inject constructor(
@@ -40,7 +41,7 @@ class HomesViewModel @Inject constructor(
     private var refreshJob: Job? = null
 
     init {
-        startAutoRefresh()
+        //startAutoRefresh()
     }
 
     private fun startAutoRefresh() {
@@ -101,7 +102,17 @@ class HomesViewModel @Inject constructor(
     fun addHome(name: String, address: String) {
         viewModelScope.launch {
             try {
-                val token = tokenRepository.getToken()
+                val newHome = HomeDto(
+                    home_id = UUID.randomUUID().toString(),
+                    name = name,
+                    address = address,
+                    is_archived = false,
+                    created_at = "08/10/26",
+                    default_mode_id = "1",
+                    default_mode_name = "disarmed",
+                )
+                _homesState.value += newHome
+                /*val token = tokenRepository.getToken()
                 val request = AddHomeRequest(name, address)
                 val response = homeApi.addHome(token, request)
 
@@ -113,7 +124,7 @@ class HomesViewModel @Inject constructor(
                     val errorMessage = parseErrorMessage(errorBody)
                     _errorMessage.value = errorMessage
                     Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-                }
+                }*/
             } catch (e: Exception) {
                 val errorMessage = "Network error: ${e.message}"
                 _errorMessage.value = errorMessage
@@ -124,7 +135,8 @@ class HomesViewModel @Inject constructor(
 
     suspend fun deleteHome(homeId: String) {
         try {
-            val token = tokenRepository.getToken()
+            _homesState.value = _homesState.value.filter { it.home_id != homeId }
+            /*val token = tokenRepository.getToken()
             val response = homeApi.deleteHome(token, homeId)
             if (response.isSuccessful) {
                 loadHomes()
@@ -134,7 +146,7 @@ class HomesViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -144,7 +156,15 @@ class HomesViewModel @Inject constructor(
 
     suspend fun archiveHome(homeId: String) {
         try {
-            val token = tokenRepository.getToken()
+            _homesState.value = _homesState.value.map { home ->
+                if (home.home_id == homeId) {
+                    home.copy(is_archived = true)
+                } else {
+                    home
+                }
+            }
+
+            /*val token = tokenRepository.getToken()
             val response = homeApi.archiveHome(token, homeId)
             if (response.isSuccessful) {
                 loadHomes()
@@ -154,7 +174,7 @@ class HomesViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -164,7 +184,15 @@ class HomesViewModel @Inject constructor(
 
     suspend fun unArchiveHome(homeId: String) {
         try {
-            val token = tokenRepository.getToken()
+            _homesState.value = _homesState.value.map { home ->
+                if (home.home_id == homeId) {
+                    home.copy(is_archived = false)
+                } else {
+                    home
+                }
+            }
+
+            /*val token = tokenRepository.getToken()
             val response = homeApi.unArchiveHome(token, homeId)
             if (response.isSuccessful) {
                 loadHomes()
@@ -174,7 +202,7 @@ class HomesViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -184,7 +212,15 @@ class HomesViewModel @Inject constructor(
 
     suspend fun armedHome(homeId: String) {
         try {
-            val token = tokenRepository.getToken()
+            _homesState.value = _homesState.value.map { home ->
+                if (home.home_id == homeId) {
+                    home.copy(default_mode_name = "armed")
+                } else {
+                    home
+                }
+            }
+
+            /*val token = tokenRepository.getToken()
             val response = homeApi.armedHome(token, homeId)
             if (response.isSuccessful) {
                 loadHomes()
@@ -194,7 +230,7 @@ class HomesViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -204,6 +240,14 @@ class HomesViewModel @Inject constructor(
 
     suspend fun disarmedHome(homeId: String) {
         try {
+            _homesState.value = _homesState.value.map { home ->
+                if (home.home_id == homeId) {
+                    home.copy(default_mode_name = "disarmed")
+                } else {
+                    home
+                }
+            }
+            /*
             val token = tokenRepository.getToken()
             val response = homeApi.disarmedHome(token, homeId)
             if (response.isSuccessful) {
@@ -214,7 +258,7 @@ class HomesViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("HomeViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
