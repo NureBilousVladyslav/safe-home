@@ -47,9 +47,12 @@ class ProfileFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 profileViewModel.userState.collect { user ->
                     with(binding){
-                        nameTextView.text = user?.user?.name
-                        emailTextView.text = user?.user?.email
-                        subscriptionTextView.text = user?.user?.subscription_plan_name?.replaceFirstChar { it.uppercaseChar() }
+                        nameTextView.text = "Name"
+                        emailTextView.text = "mail@gmail.com"
+                        subscriptionTextView.text = "Vip"
+                        //nameTextView.text = user?.user?.name
+                        //emailTextView.text = user?.user?.email
+                        //subscriptionTextView.text = user?.user?.subscription_plan_name?.replaceFirstChar { it.uppercaseChar() }
 
                         subscriptionConstraintLayout.setOnClickListener {
                             val url = "https://safe-home-frontend-agf4a0cghre0fuhy.northeurope-01.azurewebsites.net/login"

@@ -75,7 +75,7 @@ class SignInFragment : Fragment() {
                             startActivity(MainActivity::class.java)
                         }
                         is Result.Error -> {
-                            val message = when (val error = result.errorType) {
+                            /*val message = when (val error = result.errorType) {
                                 is ErrorType.ServerError -> {
                                     if (error.code == 422) "Wrong login or password"
                                     else if (error.code == 403) "Server is closed"
@@ -85,7 +85,9 @@ class SignInFragment : Fragment() {
                                 is ErrorType.InternalError -> error.message
                             }
 
-                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()*/
+
+                            startActivity(MainActivity::class.java)
                         }
                     }
                 }

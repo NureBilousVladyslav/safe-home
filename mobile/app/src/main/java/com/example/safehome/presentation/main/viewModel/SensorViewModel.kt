@@ -7,6 +7,7 @@ import com.example.safehome.data.api.SensorApi
 import com.example.safehome.data.model.ActiveSensorRequest
 import com.example.safehome.data.model.AddSensorRequest
 import com.example.safehome.data.model.ErrorResponse
+import com.example.safehome.data.model.HomeDto
 import com.example.safehome.data.model.SensorDto
 import com.example.safehome.data.repo.BiometricRepository
 import com.example.safehome.data.repo.TokenRepository
@@ -20,7 +21,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.collections.plus
 
 @HiltViewModel
 class SensorViewModel @Inject constructor(
@@ -28,6 +31,9 @@ class SensorViewModel @Inject constructor(
     private val biometricRepository: BiometricRepository,
     private val sensorApi: SensorApi
 ) : ViewModel() {
+    companion object {
+        private val sensorsCache = mutableMapOf<String, MutableList<SensorDto>>()
+    }
     private val _sensorsState = MutableStateFlow<List<SensorDto>>(emptyList())
     val sensorsState: StateFlow<List<SensorDto>> = _sensorsState.asStateFlow()
     private val _errorMessage = MutableStateFlow<String?>(null)
@@ -43,11 +49,12 @@ class SensorViewModel @Inject constructor(
 
     fun setHomeId(homeId: String) {
         this.homeId = homeId
-        startAutoRefresh()
-        loadSensors()
+        _sensorsState.value = sensorsCache[homeId]?.toList() ?: emptyList()
+        //startAutoRefresh()
+        //loadSensors()
     }
 
-    private fun startAutoRefresh() {
+    /*private fun startAutoRefresh() {
         refreshJob?.cancel()
         refreshJob = viewModelScope.launch {
             while (true) {
@@ -55,7 +62,7 @@ class SensorViewModel @Inject constructor(
                 delay(3000)
             }
         }
-    }
+    }*/
 
     fun isBiometricEnabled(): Boolean {
         return biometricRepository.isBiometricEnabled()
@@ -99,7 +106,21 @@ class SensorViewModel @Inject constructor(
     fun addSensor(homeId: String, name: String, type: String) {
         viewModelScope.launch {
             try {
-                val token = tokenRepository.getToken()
+                val newSensor = SensorDto(
+                    sensor_id = UUID.randomUUID().toString(),
+                    name = name,
+                    type = type,
+                    is_archived = false,
+                    created_at = "08/10/26",
+                    short_code = "123456",
+                    is_active = true,
+                    is_closed = true,
+                    is_security_breached = false,
+                )
+                val current = sensorsCache.getOrPut(homeId) { mutableListOf() }
+                current.add(newSensor)
+                _sensorsState.value = current.toList()
+                /*val token = tokenRepository.getToken()
                 val request = AddSensorRequest(homeId, name, type)
                 val response = sensorApi.addSensor(token, request)
 
@@ -111,7 +132,7 @@ class SensorViewModel @Inject constructor(
                     val errorMessage = parseErrorMessage(errorBody)
                     _errorMessage.value = errorMessage
                     Timber.tag("SensorViewModel").e(errorMessage ?: "Unknown error")
-                }
+                }*/
             } catch (e: Exception) {
                 val errorMessage = "Network error: ${e.message}"
                 _errorMessage.value = errorMessage
@@ -122,6 +143,11 @@ class SensorViewModel @Inject constructor(
 
     suspend fun deleteSensor(sensorId: String) {
         try {
+            val hid = homeId ?: return
+            val current = sensorsCache[hid] ?: return
+            current.removeAll { it.sensor_id == sensorId }
+            _sensorsState.value = current.toList()
+            /*
             val token = tokenRepository.getToken()
             val response = sensorApi.deleteSensor(token, sensorId)
             if (response.isSuccessful) {
@@ -132,7 +158,7 @@ class SensorViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("SensorViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -142,7 +168,15 @@ class SensorViewModel @Inject constructor(
 
     suspend fun archiveSensor(sensorId: String) {
         try {
-            val token = tokenRepository.getToken()
+            val hid = homeId ?: return
+            val current = sensorsCache[hid] ?: return
+            val index = current.indexOfFirst { it.sensor_id == sensorId }
+            if (index != -1) {
+                current[index] = current[index].copy(is_archived = true)
+                _sensorsState.value = current.toList()
+            }
+
+            /*val token = tokenRepository.getToken()
             val response = sensorApi.archiveSensor(token, sensorId)
             if (response.isSuccessful) {
                 loadSensors()
@@ -152,7 +186,7 @@ class SensorViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("SensorViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -162,7 +196,15 @@ class SensorViewModel @Inject constructor(
 
     suspend fun unArchiveSensor(sensorId: String) {
         try {
-            val token = tokenRepository.getToken()
+            val hid = homeId ?: return
+            val current = sensorsCache[hid] ?: return
+            val index = current.indexOfFirst { it.sensor_id == sensorId }
+            if (index != -1) {
+                current[index] = current[index].copy(is_archived = false)
+                _sensorsState.value = current.toList()
+            }
+
+            /*val token = tokenRepository.getToken()
             val response = sensorApi.unArchiveSensor(token, sensorId)
             if (response.isSuccessful) {
                 loadSensors()
@@ -172,7 +214,7 @@ class SensorViewModel @Inject constructor(
                 val errorMessage = parseErrorMessage(errorBody)
                 _errorMessage.value = errorMessage
                 Timber.tag("SensorViewModel").e(errorMessage ?: "Unknown error")
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
@@ -182,7 +224,16 @@ class SensorViewModel @Inject constructor(
 
     suspend fun setActiveSensor(sensorId: String, isActive: Boolean): Boolean {
         try {
-            val token = tokenRepository.getToken()
+            val hid = homeId ?: return false
+            val current = sensorsCache[hid] ?: return false
+            val index = current.indexOfFirst { it.sensor_id == sensorId }
+            if (index != -1) {
+                current[index] = current[index].copy(is_active = isActive)
+                _sensorsState.value = current.toList()
+            }
+            return true
+
+            /*val token = tokenRepository.getToken()
             val request = ActiveSensorRequest(isActive)
             val response = sensorApi.setActiveSensor(token, sensorId, request)
 
@@ -199,7 +250,7 @@ class SensorViewModel @Inject constructor(
                 _errorMessage.value = errorMessage
                 Timber.tag("SensorViewModel").e(errorMessage ?: "Unknown error")
                 return false
-            }
+            }*/
         } catch (e: Exception) {
             val errorMessage = "Network error: ${e.message}"
             _errorMessage.value = errorMessage
