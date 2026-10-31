@@ -30,10 +30,11 @@ A mobile application for securely managing smart home features, with important a
 ## Screenshots
 
 ![Screenshot 1](screenshots/1.png)
+
 ![Screenshot 2](screenshots/2.png)
 
 ## Author
 
-Vladyslav Bilous
-Kharkiv National University of Radio Electronics
+Vladyslav Bilous  
+Kharkiv National University of Radio Electronics  
 Specialty 121 — Software Engineering
